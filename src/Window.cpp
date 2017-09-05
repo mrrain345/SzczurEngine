@@ -1,10 +1,10 @@
-#include <Window.h>
-#include <Game.h>
+#include <Szczur/System.h>
+#include <Szczur/Window.h>
 
 namespace Szczur {
 	Window::Window(unsigned char opacity) :content(this) {
-		rect.left = 0;
-		rect.top = 0;
+		rect.x = 0;
+		rect.y = 0;
 		rect.width = Game::Width();
 		rect.height = Game::Height();
 		this->opacity = opacity;
@@ -13,18 +13,18 @@ namespace Szczur {
 	
 	Window::Window(int width, int height, unsigned char opacity) :content(this) {
 		if (width > 0) {
-			rect.left = (Game::Width() - width)/2;
+			rect.x = (Game::Width() - width)/2;
 			rect.width = width;
 		} else {
-			rect.left = -width;
+			rect.x = -width;
 			rect.width = Game::Width() + 2*width;
 		}
 		
 		if (height > 0) {
-			rect.top = (Game::Height() - height)/2;
-			rect.top = height;
+			rect.y = (Game::Height() - height)/2;
+			rect.height = height;
 		} else {
-			rect.left = -height;
+			rect.y = -height;
 			rect.height = Game::Height() + 2*height;
 		}
 		this->opacity = opacity;
@@ -32,8 +32,8 @@ namespace Szczur {
 	}
 	
 	Window::Window(int x, int y, int width, int height, unsigned char opacity) :content(this) {
-		rect.left = x;
-		rect.top = y;
+		rect.x = x;
+		rect.y = y;
 		
 		if(width > 0) rect.width = width;
 		else rect.width = Game::Width() - x + width;
@@ -44,20 +44,20 @@ namespace Szczur {
 		WindowsManager::Add(this);
 	}
 	
-	Window::Window(sf::IntRect rect, unsigned char opacity) :content(this) {
+	Window::Window(Rect rect, unsigned char opacity) :content(this) {
 		this->rect = rect;
 		this->opacity = opacity;
 		WindowsManager::Add(this);
 	}
 	
-	sf::Vector2f Window::Position() { return sf::Vector2f(rect.left, rect.top); }
+	Vector2 Window::Position() { return Vector2(rect.x, rect.y); }
 	
 	int Window::Width() { return rect.width; }
 	int Window::Height() { return rect.height; }
 	unsigned int Window::Opacity() { return opacity; }
 	
-	sf::Vector2f Window::GlobalToWindowCoords(sf::Vector2f coords) { return coords - Position(); }
-	sf::Vector2f Window::WindowToGlobalCoords(sf::Vector2f coords) { return coords + Position(); }
+	Vector2 Window::GlobalToWindowCoords(Vector2 coords) { return coords - Position(); }
+	Vector2 Window::WindowToGlobalCoords(Vector2 coords) { return coords + Position(); }
 	
 	void Window::Close() {
 		OnClosed();

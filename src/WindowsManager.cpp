@@ -1,7 +1,5 @@
-#include <WindowsManager.h>
-#include <Time.h>
-#include <Input.h>
-#include <Game.h>
+#include <Szczur/Window/WindowsManager.h>
+#include <Szczur/System.h>
 
 namespace Szczur {
 	std::list<Window*> WindowsManager::actives;

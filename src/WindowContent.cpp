@@ -1,17 +1,17 @@
-#include <WindowContent.h>
-#include <Window.h>
-#include <Game.h>
-#include <iostream>
+#include <Szczur/Window.h>
+
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 namespace Szczur {
-	static int min(int a, int b) { if (a <= b) return a; return b; }
+	static int min(int a, int b) { return (a <= b) ? a : b; }
 	
 	WindowContent::WindowContent(Window* window) {
 		this->window = window;
 	}
 	
-	void WindowContent::Fill(sf::Color color, unsigned char opacity) {
-		sf::RectangleShape shape(sf::Vector2f(window->Width(), window->Height()));
+	void WindowContent::Fill(Color color, unsigned char opacity) {
+		sf::RectangleShape shape(Vector2(window->Width(), window->Height()));
 		shape.setPosition(window->Position());
 		
 		float alpha = window->Opacity()/255.0f * opacity/255.0f;
@@ -20,12 +20,12 @@ namespace Szczur {
 		Game::Draw(shape);
 	}
 	
-	void WindowContent::FillRect(sf::IntRect rect, sf::Color color, unsigned char opacity) {
-		int width = min(rect.width, window->Width() - rect.left);
-		int height = min(rect.height, window->Height() - rect.top);
+	void WindowContent::FillRect(Rect rect, Color color, unsigned char opacity) {
+		int width = min(rect.width, window->Width() - rect.x);
+		int height = min(rect.height, window->Height() - rect.y);
 		
-		sf::RectangleShape shape(sf::Vector2f(width, height));
-		shape.setPosition(sf::Vector2f(rect.left + window->Position().x, rect.top + window->Position().y));
+		sf::RectangleShape shape(Vector2(width, height));
+		shape.setPosition(Vector2(rect.x + window->Position().x, rect.y + window->Position().y));
 		
 		float alpha = window->Opacity()/255.0f * opacity/255.0f;
 		color.a = (unsigned char)(alpha * 255);
@@ -33,28 +33,28 @@ namespace Szczur {
 		Game::Draw(shape);
 	}
 	
-	void WindowContent::DrawText(sf::Vector2f position, const char* str, unsigned int fontSize) {
+	void WindowContent::DrawText(Vector2 position, const char* str, unsigned int fontSize) {
 		sf::Text text(str, Game::defaultFont, fontSize);
 		text.setPosition(position + window->Position());
 		text.setColor(textColor);
 		Game::Draw(text);
 	}
 	
-	void WindowContent::DrawText(sf::Vector2f position, const char* str, sf::Font font, unsigned int fontSize) {
+	void WindowContent::DrawText(Vector2 position, const char* str, sf::Font font, unsigned int fontSize) {
 		sf::Text text(str, font, fontSize);
 		text.setPosition(position + window->Position());
 		text.setColor(textColor);
 		Game::Draw(text);
 	}
 	
-	void WindowContent::DrawText(sf::Vector2f position, sf::String str, unsigned int fontSize) {
+	void WindowContent::DrawText(Vector2 position, sf::String str, unsigned int fontSize) {
 		sf::Text text(str, Game::defaultFont, fontSize);
 		text.setPosition(position + window->Position());
 		text.setColor(textColor);
 		Game::Draw(text);
 	}
 	
-	void WindowContent::DrawText(sf::Vector2f position, sf::String str, sf::Font font, unsigned int fontSize) {
+	void WindowContent::DrawText(Vector2 position, sf::String str, sf::Font font, unsigned int fontSize) {
 		sf::Text text(str, font, fontSize);
 		text.setPosition(position + window->Position());
 		text.setColor(textColor);

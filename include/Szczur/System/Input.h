@@ -1,6 +1,9 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <Szczur/System/Vector2.h>
+
+#include <SFML/Window/Event.hpp>
 #include <list>
+#include <functional>
 
 namespace Szczur {
 	class InputEvents;
@@ -131,58 +134,55 @@ namespace Szczur {
 			WHEEL_Horizontal     ///< The horizontal mouse wheel
 		};
 		
-		typedef void(*keyEvent_f)(Key key);
-		typedef void(*mouseEvent_f)(Button button);
-		typedef void(*mouseMoveEvent_f)(int x, int y);
-		typedef void(*resizeEvent_f)(int x, int y);
-		
 	private:
 		Input() {} //Static class
 		
-		static std::list<keyEvent_f> keyPress;
-		static std::list<keyEvent_f> keyRelease;
-		static std::list<keyEvent_f> keyClick;
-		static std::list<mouseEvent_f> mousePress;
-		static std::list<mouseEvent_f> mouseRelease;
-		static std::list<mouseEvent_f> mouseClick;
-		static std::list<mouseMoveEvent_f> mouseMove;
-		static std::list<resizeEvent_f> resize;
+		static std::list<std::function<void(Key)>>		keyPress;
+		static std::list<std::function<void(Key)>>		keyRelease;
+		static std::list<std::function<void(Key)>>		keyClick;
+		static std::list<std::function<void(Button)>>	mousePress;
+		static std::list<std::function<void(Button)>>	mouseRelease;
+		static std::list<std::function<void(Button)>>	mouseClick;
+		static std::list<std::function<void(int, int)>>	mouseMove;
+		static std::list<std::function<void(int, int)>>	resize;
 		static std::list<InputEvents*> handlers;
 		
 		static Key lastKey;
 		static Button lastButton;
-		static sf::Vector2f lastMousePos;
+		static Vector2 lastMousePos;
 		
 	public:
 		static void Init();
-		static bool IsKeyPressed(Key key);
-		static bool IsKeyReleased(Key key);
-		static bool IsMousePressed(Button button);
-		static bool IsMouseReleased(Button button);
+		static bool IsKeyPressed	(Key key);
+		static bool IsKeyReleased	(Key key);
+		static bool IsMousePressed	(Button button);
+		static bool IsMouseReleased	(Button button);
 		
-		static sf::Vector2f GetMousePosition();
+		static Vector2 GetMousePosition();
 		
-		static void OnKeyPressed(sf::Event event);
-		static void OnKeyReleased(sf::Event event);
-		static void OnMousePressed(sf::Event event);
-		static void OnMouseReleased(sf::Event event);
-		static void OnMouseMoved(sf::Event event);
-		static void OnResized(sf::Event event);
+		static void OnKeyPressed	(sf::Event event);
+		static void OnKeyReleased	(sf::Event event);
+		static void OnMousePressed	(sf::Event event);
+		static void OnMouseReleased	(sf::Event event);
+		static void OnMouseMoved	(sf::Event event);
+		static void OnResized		(sf::Event event);
 		
-		static void KeyPress(keyEvent_f handler);
-		static void KeyRelease(keyEvent_f handler);
-		static void KeyClick(keyEvent_f handler);
-		static void MousePress(mouseEvent_f handler);
-		static void MouseRelease(mouseEvent_f handler);
-		static void MouseClick(mouseEvent_f handler);
-		static void MouseMove(mouseMoveEvent_f handler);
-		static void Resize(resizeEvent_f handler);
+		static void KeyPress		(std::function<void(Key)>		handler);
+		static void KeyRelease		(std::function<void(Key)>		handler);
+		static void KeyClick		(std::function<void(Key)>		handler);
+		static void MousePress		(std::function<void(Button)>	handler);
+		static void MouseRelease	(std::function<void(Button)>	handler);
+		static void MouseClick		(std::function<void(Button)>	handler);
+		static void MouseMove		(std::function<void(int, int)>	handler);
+		static void Resize			(std::function<void(int, int)>	handler);
 		
 		static void Register(InputEvents* handler);
 	};
 	
 	class InputEvents {
 	public:
+		InputEvents() { Input::Register(this); }
+		
 		virtual void OnKeyPress		(Input::Key key) {}
 		virtual void OnKeyRelease	(Input::Key key) {}
 		virtual void OnKeyClick		(Input::Key key) {}
@@ -192,9 +192,4 @@ namespace Szczur {
 		virtual void OnMouseMove	(int x, int y) {}
 		virtual void OnResize		(int x, int y) {}
 	};
-	
-	typedef void(*keyEvent_f)(Input::Key key);
-	typedef void(*mouseEvent_f)(Input::Button button);
-	typedef void(*mouseMoveEvent_f)(int x, int y);
-	typedef void(*resizeEvent_f)(int x, int y);
 }

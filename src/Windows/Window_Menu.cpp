@@ -1,6 +1,4 @@
 #include <Window_Menu.h>
-#include <Game.h>
-#include <Input.h>
 #include <Window_Items.h>
 
 namespace Szczur {
@@ -21,15 +19,15 @@ namespace Szczur {
 	}
 	
 	void Window_Menu::Refresh() {
-		content.Fill(sf::Color::Black, 128);
-		content.FillRect(sf::IntRect(32, 32, 320, Game::Height() - 64), sf::Color(32, 32, 32));
+		content.Fill(Color::Black, 128);
+		content.FillRect(sf::IntRect(32, 32, 320, Game::Height() - 64), Color(32, 32, 32));
 		
-		content.FillRect(sf::IntRect(48, option * 32 + 48, 288, 32), sf::Color::White);
+		content.FillRect(sf::IntRect(48, option * 32 + 48, 288, 32), Color::White);
 		
 		for (int i = 0; i < options_count; i++) {
-			if (i == option) content.textColor = sf::Color::Black;
-			content.DrawText(sf::Vector2f(48, i * 32 + 48), options[i], 24);
-			if (i == option) content.textColor = sf::Color::White;
+			if (i == option) content.textColor = Color::Black;
+			content.DrawText(Vector2(48, i * 32 + 48), options[i], 24);
+			if (i == option) content.textColor = Color::White;
 		}
 	}
 	

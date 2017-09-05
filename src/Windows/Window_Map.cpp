@@ -1,11 +1,10 @@
+#include <Szczur/Map/MapManager.h>
 #include <Window_Map.h>
-#include <Game.h>
-#include <Input.h>
-#include <MapManager.h>
 #include <Window_Menu.h>
 
 namespace Szczur {
 	Window_Map::Window_Map() {
+		MapManager::Init();
 		SetActive();
 	}
 	

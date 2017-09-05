@@ -1,6 +1,4 @@
 #include <Window_Title.h>
-#include <Game.h>
-#include <Input.h>
 #include <Window_Map.h>
 
 namespace Szczur {
@@ -22,16 +20,16 @@ namespace Szczur {
 		int x = (Game::Width() - width) / 2;
 		int y = Game::Height() - height - 64;
 		
-		content.Fill(sf::Color(128, 128, 128));
-		content.FillRect(sf::IntRect(x, y, width, height), sf::Color(66, 66, 66));
+		content.Fill(Color(128, 128, 128));
+		content.FillRect(sf::IntRect(x, y, width, height), Color(66, 66, 66));
 		
-		content.FillRect(sf::IntRect(x + 16,  y + 16 + option*32, width - 32, 32), sf::Color::White);
+		content.FillRect(sf::IntRect(x + 16,  y + 16 + option*32, width - 32, 32), Color::White);
 		
 		for (int i = 0; i < options_count; i++) {
-			if (i == option) content.textColor = sf::Color::Black;
-			if (i == 1) content.textColor = sf::Color(128, 128, 128);
-			content.DrawText(sf::Vector2f(x + 16, y + 16 + i*32), options[i], 24);
-			content.textColor = sf::Color::White;
+			if (i == option) content.textColor = Color::Black;
+			if (i == 1) content.textColor = Color(128, 128, 128);
+			content.DrawText(Vector2(x + 16, y + 16 + i*32), options[i], 24);
+			content.textColor = Color::White;
 		}
 	}
 	

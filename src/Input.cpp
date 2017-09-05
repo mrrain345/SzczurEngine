@@ -1,21 +1,19 @@
-#include <Input.h>
-#include <Game.h>
-#include <iostream>
+#include <Szczur/System.h>
 
 namespace Szczur {
-	std::list<keyEvent_f>		Input::keyPress;
-	std::list<keyEvent_f>		Input::keyRelease;
-	std::list<keyEvent_f>		Input::keyClick;
-	std::list<mouseEvent_f>		Input::mousePress;
-	std::list<mouseEvent_f>		Input::mouseRelease;
-	std::list<mouseEvent_f>		Input::mouseClick;
-	std::list<mouseMoveEvent_f>	Input::mouseMove;
-	std::list<resizeEvent_f>	Input::resize;
-	std::list<InputEvents*>		Input::handlers;
+	std::list<std::function<void(Input::Key)>>		Input::keyPress;
+	std::list<std::function<void(Input::Key)>>		Input::keyRelease;
+	std::list<std::function<void(Input::Key)>>		Input::keyClick;
+	std::list<std::function<void(Input::Button)>>	Input::mousePress;
+	std::list<std::function<void(Input::Button)>>	Input::mouseRelease;
+	std::list<std::function<void(Input::Button)>>	Input::mouseClick;
+	std::list<std::function<void(int, int)>>		Input::mouseMove;
+	std::list<std::function<void(int, int)>>		Input::resize;
+	std::list<InputEvents*>							Input::handlers;
 	
 	Input::Key Input::lastKey = KEY_Unknown;
 	Input::Button Input::lastButton = BUTTON_Unknown;
-	sf::Vector2f Input::lastMousePos;
+	Vector2 Input::lastMousePos;
 	
 	void Input::Init() {}
 	
@@ -24,8 +22,8 @@ namespace Szczur {
 	bool Input::IsMousePressed	(Input::Button button)	{ return  sf::Mouse::isButtonPressed((sf::Mouse::Button)button); }
 	bool Input::IsMouseReleased	(Input::Button button)	{ return !sf::Mouse::isButtonPressed((sf::Mouse::Button)button); }
 	
-	sf::Vector2f Input::GetMousePosition() {
-		sf::Vector2f pos = (sf::Vector2f)sf::Mouse::getPosition(Game::window);
+	Vector2 Input::GetMousePosition() {
+		Vector2 pos = (Vector2)sf::Mouse::getPosition(Game::window);
 		pos.x *= (float)Game::Width() / Game::window.getSize().x;
 		pos.y *= (float)Game::Height() / Game::window.getSize().y;
 		return pos;
@@ -69,12 +67,12 @@ namespace Szczur {
 		}
 		
 		lastButton = BUTTON_Unknown;
-		lastMousePos = sf::Vector2f(-1, -1);
+		lastMousePos = Vector2(-1, -1);
 	}
 	
 	void Input::OnMouseMoved(sf::Event event) {
-		for (auto func: mouseMove) { sf::Vector2f pos = GetMousePosition(); func(pos.x, pos.y); }
-		for (auto handler: handlers) { sf::Vector2f pos = GetMousePosition(); handler->OnMouseMove(pos.x, pos.y); }
+		for (auto func: mouseMove) { Vector2 pos = GetMousePosition(); func(pos.x, pos.y); }
+		for (auto handler: handlers) { Vector2 pos = GetMousePosition(); handler->OnMouseMove(pos.x, pos.y); }
 	}
 	
 	void Input::OnResized(sf::Event event) {
@@ -83,13 +81,13 @@ namespace Szczur {
 		Game::Refresh();
 	}
 	
-	void Input::KeyPress	(keyEvent_f handler)		{ keyPress.push_back(handler); }
-	void Input::KeyRelease	(keyEvent_f handler)		{ keyRelease.push_back(handler); }
-	void Input::KeyClick	(keyEvent_f handler)		{ keyClick.push_back(handler); }
-	void Input::MousePress	(mouseEvent_f handler)		{ mousePress.push_back(handler); }
-	void Input::MouseRelease(mouseEvent_f handler)		{ mouseRelease.push_back(handler); }
-	void Input::MouseClick	(mouseEvent_f handler)		{ mouseClick.push_back(handler); }
-	void Input::MouseMove	(mouseMoveEvent_f handler)	{ mouseMove.push_back(handler); }
-	void Input::Resize		(resizeEvent_f handler)		{ resize.push_back(handler); }
-	void Input::Register	(InputEvents* handler)		{ handlers.push_back(handler); }
+	void Input::KeyPress	(std::function<void(Input::Key)>	handler)	{ keyPress.push_back(handler); }
+	void Input::KeyRelease	(std::function<void(Input::Key)>	handler)	{ keyRelease.push_back(handler); }
+	void Input::KeyClick	(std::function<void(Input::Key)>	handler)	{ keyClick.push_back(handler); }
+	void Input::MousePress	(std::function<void(Input::Button)>	handler)	{ mousePress.push_back(handler); }
+	void Input::MouseRelease(std::function<void(Input::Button)>	handler)	{ mouseRelease.push_back(handler); }
+	void Input::MouseClick	(std::function<void(Input::Button)>	handler)	{ mouseClick.push_back(handler); }
+	void Input::MouseMove	(std::function<void(int, int)>		handler)	{ mouseMove.push_back(handler); }
+	void Input::Resize		(std::function<void(int, int)>		handler)	{ resize.push_back(handler); }
+	void Input::Register	(InputEvents* handler)							{ handlers.push_back(handler); }
 }

@@ -1,7 +1,8 @@
 #pragma once
+#include <Szczur/Window/Window.h>
+#include <Szczur/System/Input.h>
+
 #include <list>
-#include <Window.h>
-#include <Input.h>
 
 namespace Szczur {
 	class Window;

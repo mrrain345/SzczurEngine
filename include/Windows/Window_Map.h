@@ -1,6 +1,6 @@
 #pragma once
-#include <Window.h>
-#include <Player.h>
+#include <Szczur/Window.h>
+#include <Szczur/Map/Player.h>
 
 namespace Szczur {
 	class Window_Map :public Window {

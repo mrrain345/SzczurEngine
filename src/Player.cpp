@@ -1,9 +1,5 @@
-#include <Player.h>
-#include <Time.h>
-#include <Game.h>
-#include <MapManager.h>
-#include <Input.h>
-#include <iostream>
+#include <Szczur/System.h>
+#include <Szczur/Map.h>
 
 namespace Szczur {
 	Player::Player() {
@@ -23,7 +19,6 @@ namespace Szczur {
 		lockMove = false;
 		
 		SetFrame(0, 0);
-		Time::Register(this);
 	}
 	
 	void Player::SetFrame(int face, int n) {
@@ -61,15 +56,19 @@ namespace Szczur {
 		}
 	}
 	
-	void Player::Move(int dir, sf::Vector2f vector) {
+	bool Player::CanMove(Vector2 vector) {
+		int x = (int)(sprite.getPosition().x + vector.x) - colliderRadius;
+		int y = (int)(sprite.getPosition().y + vector.y) - colliderRadius;
+		sf::IntRect rect = sf::IntRect(x, y, colliderRadius * 2, colliderRadius * 2);
+		return !MapManager::IsCollision(rect);
+	}
+	
+	void Player::Move(int dir, Vector2 vector) {
 		float distance = 4 * Time::DeltaTime();
 		SetFace(dir);
 		
 		vector *= distance;
-		int x = (int)(sprite.getPosition().x + vector.x) - colliderRadius;
-		int y = (int)(sprite.getPosition().y + vector.y) - colliderRadius;
-		sf::IntRect rect = sf::IntRect(x, y, colliderRadius * 2, colliderRadius * 2);
-		if (MapManager::IsCollision(rect)) {
+		if (!CanMove(vector)) {
 			SetAnim(0);
 			return;
 		}
@@ -85,6 +84,7 @@ namespace Szczur {
 	
 	void Player::Update() {
 		if (lockMove) return;
+		float distance = 4 * Time::DeltaTime();
 		
 		const float s1 = 32.0f;
 		const float s2 = 22.627416998f;
@@ -95,15 +95,15 @@ namespace Szczur {
 		key[2] = Input::IsKeyPressed(Input::KEY_Right);
 		key[3] = Input::IsKeyPressed(Input::KEY_Up);
 		
-		if		(key[0] && key[1]) Move(1, sf::Vector2f(-s2,  s2));
-		else if (key[0] && key[2]) Move(2, sf::Vector2f( s2,  s2));
-		else if (key[1] && key[3]) Move(1, sf::Vector2f(-s2, -s2));
-		else if (key[2] && key[3]) Move(2, sf::Vector2f( s2, -s2));
-		else if (key[0])           Move(0, sf::Vector2f(  0,  s1));
-		else if (key[1])           Move(1, sf::Vector2f(-s1,   0));
-		else if (key[2])           Move(2, sf::Vector2f( s1,   0));
-		else if (key[3])           Move(3, sf::Vector2f(  0, -s1));
-		else                           { SetAnim(0); return; }
+		if		(key[0] && key[1] && CanMove(Vector2(-s2,  s2)*distance)) Move(1, Vector2(-s2,  s2));
+		else if (key[0] && key[2] && CanMove(Vector2( s2,  s2)*distance)) Move(2, Vector2( s2,  s2));
+		else if (key[1] && key[3] && CanMove(Vector2(-s2, -s2)*distance)) Move(1, Vector2(-s2, -s2));
+		else if (key[2] && key[3] && CanMove(Vector2( s2, -s2)*distance)) Move(2, Vector2( s2, -s2));
+		else if (key[0]           && CanMove(Vector2(  0,  s1)*distance)) Move(0, Vector2(  0,  s1));
+		else if (key[1]           && CanMove(Vector2(-s1,   0)*distance)) Move(1, Vector2(-s1,   0));
+		else if (key[2]           && CanMove(Vector2( s1,   0)*distance)) Move(2, Vector2( s1,   0));
+		else if (key[3]           && CanMove(Vector2(  0, -s1)*distance)) Move(3, Vector2(  0, -s1));
+		else { SetAnim(0); return; }
 		
 		UpdateAnim();
 	}

@@ -1,6 +1,5 @@
-#include <Time.h>
+#include <Szczur/System/Time.h>
 #include <list>
-#include <iostream>
 
 namespace Szczur {
 	float Time::time = 0;
@@ -13,12 +12,12 @@ namespace Szczur {
 	sf::Clock Time::timer;
 	float Time::fixed = 0;
 	float Time::realFixed = 0;
-	bool Time::isInitialize = false;
+	bool  Time::isInitialize = false;
 	
-	std::list<void_f> Time::update;
-	std::list<void_f> Time::fixedUpdate;
-	std::list<void_f> Time::realFixedUpdate;
-	std::list<TimeEvents*> Time::handlers;
+	std::list<std::function<void()>>	Time::update;
+	std::list<std::function<void()>>	Time::fixedUpdate;
+	std::list<std::function<void()>>	Time::realFixedUpdate;
+	std::list<TimeEvents*>				Time::handlers;
 	
 	void Time::Init() {
 		if (isInitialize) return;
@@ -57,9 +56,9 @@ namespace Szczur {
 	float Time::RealDeltaTime()		{ return realDeltaTime; }
 	float Time::GetFixedInterval()	{ return fixedInterval; }
 	
-	void Time::Update			(void_f handler)		{ update.push_back(handler); }
-	void Time::FixedUpdate		(void_f handler)		{ fixedUpdate.push_back(handler); }
-	void Time::RealFixedUpdate	(void_f handler)		{ realFixedUpdate.push_back(handler); }
-	void Time::Register			(TimeEvents* handler)	{ handlers.push_back(handler); }
+	void Time::Update				(std::function<void()> handler)	{ update.push_back(handler); }
+	void Time::FixedUpdate			(std::function<void()> handler)	{ fixedUpdate.push_back(handler); }
+	void Time::RealFixedUpdate		(std::function<void()> handler)	{ realFixedUpdate.push_back(handler); }
+	void Time::Register				(TimeEvents* handler)			{ handlers.push_back(handler); }
 }
 

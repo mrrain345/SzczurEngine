@@ -1,12 +1,5 @@
-#include <Game.h>
-#include <MapManager.h>
-#include <Input.h>
-#include <Time.h>
-#include <Player.h>
-#include <WindowsManager.h>
-#include <Window_Menu.h>
-#include <Window_Map.h>
-#include <Window_Title.h>
+#include <Szczur/System.h>
+#include <Windows/Window_Title.h>
 
 namespace Szczur {
 	bool Game::refreshFlag;
@@ -30,7 +23,6 @@ namespace Szczur {
 		Time::Init();
 		Input::Init();
 		WindowsManager::Init();
-		MapManager::Init();
 		
 		defaultFont.loadFromFile("Fonts/OpenSans-Regular.ttf");
 		

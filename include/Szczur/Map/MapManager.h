@@ -1,6 +1,7 @@
 #pragma once
-#include <Map.h>
-#include <SFML/Graphics.hpp>
+#include <Szczur/System/Vector2.h>
+#include <Szczur/System/Rect.h>
+#include <Szczur/Map/Map.h>
 
 namespace Szczur {
 	class MapManager {
@@ -17,7 +18,7 @@ namespace Szczur {
 		
 		static void DrawBack();
 		static void DrawFront();
-		static bool IsCollision(sf::Vector2f pos);
-		static bool IsCollision(sf::IntRect rect);
+		static bool IsCollision(Vector2 pos);
+		static bool IsCollision(Rect rect);
 	};
 }

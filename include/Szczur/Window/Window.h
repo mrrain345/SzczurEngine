@@ -1,8 +1,6 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <WindowsManager.h>
-#include <WindowContent.h>
-#include <Input.h>
+#include <Szczur/System.h>
+#include <Szczur/Window/WindowContent.h>
 
 namespace Szczur {
 	class Window {
@@ -11,7 +9,7 @@ namespace Szczur {
 		unsigned char opacity;
 		
 	protected:
-		sf::IntRect rect;
+		Rect rect;
 		WindowContent content;
 		
 		void SetActive();
@@ -20,16 +18,16 @@ namespace Szczur {
 		Window(unsigned char opacity = 255);
 		Window(int width, int height, unsigned char opacity = 255);
 		Window(int x, int y, int width, int height, unsigned char opacity = 255);
-		Window(sf::IntRect rect, unsigned char opacity = 255);
+		Window(Rect rect, unsigned char opacity = 255);
 		
-		sf::Vector2f Position();
+		Vector2 Position();
 		int Width();
 		int Height();
 		unsigned int Opacity();
 		void Close();
 		
-		sf::Vector2f GlobalToWindowCoords(sf::Vector2f coords);
-		sf::Vector2f WindowToGlobalCoords(sf::Vector2f coords);
+		Vector2 GlobalToWindowCoords(Vector2 coords);
+		Vector2 WindowToGlobalCoords(Vector2 coords);
 		
 		virtual void Refresh		() {}
 		virtual void Update			() {}

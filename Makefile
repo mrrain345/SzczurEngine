@@ -58,7 +58,9 @@ clean: clean32 clean64
 
 clean32:
 	@if [ -e obj_32 ]; then find obj_32; rm -rf obj_32; fi
+	@if [ -e out/Szczur_32bit ]; then echo ./out/Szczur_32bit; rm -rf out/Szczur_32bit; fi
 	
 clean64:
 	@if [ -e obj_64 ]; then find obj_64; rm -rf obj_64; fi
+	@if [ -e out/Szczur_64bit ]; then echo ./out/Szczur_64bit; rm -rf out/Szczur_64bit; fi
 

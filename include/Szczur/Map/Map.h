@@ -1,5 +1,9 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <Szczur/System/Vector2.h>
+
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Image.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 namespace Szczur {
 	class Map {
@@ -11,14 +15,14 @@ namespace Szczur {
 		sf::Sprite backimage;
 		sf::Sprite frontimage;
 		
-		sf::Vector2f offset;
+		Vector2 offset;
 		
 	public:
 		Map(const char* name);
 		void OffsetRecal();
 		void DrawBack();
 		void DrawFront();
-		bool IsCollision(sf::Vector2f pos);
-		bool IsCollision(sf::IntRect rect);
+		bool IsCollision(Vector2 pos);
+		bool IsCollision(Rect rect);
 	};
 }

@@ -1,6 +1,9 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <Time.h>
+#include <Szczur/System/Time.h>
+#include <Szczur/System/Vector2.h>
+
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 namespace Szczur {
 	class Player : TimeEvents {
@@ -13,7 +16,8 @@ namespace Szczur {
 		void SetAnim(int index);
 		void NextAnim();
 		void UpdateAnim();
-		void Move(int dir, sf::Vector2f vector);
+		void Move(int dir, Vector2 vector);
+		bool CanMove(Vector2 vector);
 		
 		int frames;
 		int directions;

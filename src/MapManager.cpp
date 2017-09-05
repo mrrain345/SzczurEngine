@@ -1,4 +1,5 @@
-#include <MapManager.h>
+#include <Szczur/System.h>
+#include <Szczur/Map.h>
 
 namespace Szczur {
 	Map* MapManager::current;
@@ -26,11 +27,11 @@ namespace Szczur {
 		current->DrawFront();
 	}
 	
-	bool MapManager::IsCollision(sf::Vector2f pos) {
+	bool MapManager::IsCollision(Vector2 pos) {
 		return current->IsCollision(pos);
 	}
 	
-	bool MapManager::IsCollision(sf::IntRect rect) {
+	bool MapManager::IsCollision(Rect rect) {
 		return current->IsCollision(rect);
 	}
 }

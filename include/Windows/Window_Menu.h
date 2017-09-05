@@ -1,5 +1,5 @@
 #pragma once
-#include <Window.h>
+#include <Szczur/Window.h>
 
 namespace Szczur {
 	class Window_Menu :public Window {
