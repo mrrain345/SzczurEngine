@@ -1,6 +1,4 @@
 #include <Szczur/System/Vector2.h>
-#define _USE_MATH_DEFINES
-#include <cmath>
 
 namespace Szczur {
 	const Vector2 Vector2::Down	( 0,  1);

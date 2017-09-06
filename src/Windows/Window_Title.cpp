@@ -1,7 +1,5 @@
 #include <Windows/Window_Title.h>
-#include <Windows/Window_Map.h>
-#define _USE_MATH_DEFINES
-#include <cmath>
+
 
 namespace Szczur {
 	static int x, y, width, height;

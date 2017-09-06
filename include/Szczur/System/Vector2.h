@@ -1,6 +1,9 @@
 #pragma once
 #include <SFML/System/Vector2.hpp>
 
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 namespace Szczur {
 	class Vector2 {	
 	public:
