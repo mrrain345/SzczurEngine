@@ -3,7 +3,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
-#if CSFML_VERSION_MINOR < 4
+#if SFML_VERSION_MINOR < 4
 	#define TEXT_SET_COLOR(text, color) text.setColor(color)
 #else
 	#define TEXT_SET_COLOR(text, color) text.setFillColor(color)
