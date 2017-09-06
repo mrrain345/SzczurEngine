@@ -13,5 +13,6 @@ namespace Szczur {
 		void Refresh();
 		
 		void OnKeyPress(Input::Key key);
+		void Update();
 	};
 }

@@ -3,7 +3,7 @@ PARAMS	:=
 ARCH	:= 32
 
 CC		:= g++
-CFLAGS	:= -Iinclude -Iinclude/Windows -std=c++11
+CFLAGS	:= -Iinclude -std=c++11
 LFLAGS	:= -lsfml-system -lsfml-window -lsfml-graphics
 
 

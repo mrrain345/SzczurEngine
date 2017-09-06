@@ -1,6 +1,6 @@
 #include <Szczur/Map/MapManager.h>
-#include <Window_Map.h>
-#include <Window_Menu.h>
+#include <Windows/Window_Map.h>
+#include <Windows/Window_Menu.h>
 
 namespace Szczur {
 	Window_Map::Window_Map() {

@@ -3,6 +3,12 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
+#if CSFML_VERSION_MINOR < 4
+	#define TEXT_SET_COLOR(text, color) text.setColor(color)
+#else
+	#define TEXT_SET_COLOR(text, color) text.setFillColor(color)
+#endif
+
 namespace Szczur {
 	static int min(int a, int b) { return (a <= b) ? a : b; }
 	
@@ -36,28 +42,35 @@ namespace Szczur {
 	void WindowContent::DrawText(Vector2 position, const char* str, unsigned int fontSize) {
 		sf::Text text(str, Game::defaultFont, fontSize);
 		text.setPosition(position + window->Position());
-		text.setColor(textColor);
+		TEXT_SET_COLOR(text, textColor);
 		Game::Draw(text);
 	}
 	
 	void WindowContent::DrawText(Vector2 position, const char* str, sf::Font font, unsigned int fontSize) {
 		sf::Text text(str, font, fontSize);
 		text.setPosition(position + window->Position());
-		text.setColor(textColor);
+		TEXT_SET_COLOR(text, textColor);
 		Game::Draw(text);
 	}
 	
 	void WindowContent::DrawText(Vector2 position, sf::String str, unsigned int fontSize) {
 		sf::Text text(str, Game::defaultFont, fontSize);
 		text.setPosition(position + window->Position());
-		text.setColor(textColor);
+		TEXT_SET_COLOR(text, textColor);
 		Game::Draw(text);
 	}
 	
 	void WindowContent::DrawText(Vector2 position, sf::String str, sf::Font font, unsigned int fontSize) {
 		sf::Text text(str, font, fontSize);
 		text.setPosition(position + window->Position());
-		text.setColor(textColor);
+		TEXT_SET_COLOR(text, textColor);
 		Game::Draw(text);
+	}
+	
+	float WindowContent::Animation(float begin, float end, std::function<float(float)> func, float state) {
+		if (state < 0) state = 0;
+		if (state > 1) state = 1;
+		float dist = (end-begin) * func(state);
+		return begin + dist;
 	}
 }

@@ -2,6 +2,7 @@
 #include <Szczur/System.h>
 
 #include <SFML/System/String.hpp>
+#include <functional>
 
 namespace Szczur {
 	class Window;
@@ -21,5 +22,6 @@ namespace Szczur {
 		void DrawText(Vector2 position, const char* str, sf::Font font, unsigned int fontSize = 18);
 		void DrawText(Vector2 position, sf::String str, unsigned int fontSize = 18);
 		void DrawText(Vector2 position, sf::String str, sf::Font font, unsigned int fontSize = 18);
+		float Animation(float begin, float end, std::function<float(float)> func, float state);
 	};
 }

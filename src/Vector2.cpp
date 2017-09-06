@@ -1,4 +1,5 @@
 #include <Szczur/System/Vector2.h>
+#define _USE_MATH_DEFINES
 #include <cmath>
 
 namespace Szczur {
@@ -134,7 +135,6 @@ namespace Szczur {
 		float mag = sqrt(vec1.SqrMagnitude() * vec2.SqrMagnitude());
 		return acos(Dot(vec1, vec2) / mag) * (180/M_PI);
 	}
-	
 	
 	
 	Vector2 Vector2::operator!	()						{ return Vector2(-x, y); }

@@ -1,5 +1,5 @@
-#include <Window_Menu.h>
-#include <Window_Items.h>
+#include <Windows/Window_Menu.h>
+#include <Windows/Window_Items.h>
 
 namespace Szczur {
 	Window_Menu::Window_Menu() {
@@ -32,6 +32,7 @@ namespace Szczur {
 	}
 	
 	static Window* activeWindow = 0;
+	static int activeOption = -1;
 	
 	void Window_Menu::OnKeyPress(Input::Key key) {
 		if (key == Input::KEY_Escape) Close();
@@ -49,7 +50,7 @@ namespace Szczur {
 		}
 
 		if (key == Input::KEY_Return) {
-			if (option == 0) activeWindow = new Window_Items;
+			if (option == 0) { activeOption = option; activeWindow = new Window_Items; }
 			if (option == options_count - 1) Game::Close();
 		}
 	}
@@ -78,9 +79,13 @@ namespace Szczur {
 		if (option < 0) option = 0;
 		if (option > options_count - 1) option = options_count - 1;
 		
-		if (activeWindow != 0) {
-			WindowsManager::Remove(activeWindow);
+		bool isCurrent = (activeOption == option);
+		
+		if (activeWindow != 0 || isCurrent) {
+			activeWindow->Close();
 			activeWindow = 0;
+			activeOption = -1;
+			if (isCurrent) return;
 		}
 		
 		OnKeyPress(Input::KEY_Return);
