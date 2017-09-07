@@ -34,4 +34,9 @@ namespace Szczur {
 	bool MapManager::IsCollision(Rect rect) {
 		return current->IsCollision(rect);
 	}
+	
+	void MapManager::Close() {
+		delete current;
+		current = 0;
+	}
 }

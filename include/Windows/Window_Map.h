@@ -12,5 +12,6 @@ namespace Szczur {
 		void OnKeyPress(Input::Key key);
 		void OnGainActive();
 		void OnLostActive();
+		void OnClosed();
 	};
 }

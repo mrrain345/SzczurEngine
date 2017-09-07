@@ -7,8 +7,6 @@ namespace Szczur {
 	int Game::height;
 	sf::RenderWindow Game::window;
 	bool Game::isInitialize = false;
-	
-	sf::Font Game::defaultFont;
 
 	void Game::Init(const char* title, int width, int height) {
 		if (isInitialize) return;
@@ -23,8 +21,6 @@ namespace Szczur {
 		Time::Init();
 		Input::Init();
 		WindowsManager::Init();
-		
-		defaultFont.loadFromFile("Fonts/OpenSans-Regular.ttf");
 		
 		new Window_Title;
 		Loop();
@@ -65,7 +61,10 @@ namespace Szczur {
 	}
 
 	void Game::Close() {
+		WindowsManager::RemoveAll();
 		window.close();
+		Content::DebugPrint();
+		exit(0);
 	}
 
 	int Game::Width() {

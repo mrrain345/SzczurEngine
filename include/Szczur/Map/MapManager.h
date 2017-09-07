@@ -20,5 +20,7 @@ namespace Szczur {
 		static void DrawFront();
 		static bool IsCollision(Vector2 pos);
 		static bool IsCollision(Rect rect);
+		
+		static void Close();
 	};
 }

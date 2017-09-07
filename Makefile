@@ -9,7 +9,7 @@ LFLAGS	:= -lsfml-system -lsfml-window -lsfml-graphics
 
 OBJS_32	:= $(patsubst src/%.cpp, obj_32/%.o, $(wildcard src/*.cpp)) $(patsubst src/%.cpp, obj_32/%.o, $(wildcard src/*/*.cpp))
 OBJS_64	:= $(patsubst src/%.cpp, obj_64/%.o, $(wildcard src/*.cpp)) $(patsubst src/%.cpp, obj_64/%.o, $(wildcard src/*/*.cpp))
-HEADERS	:= $(wildcard include/*.h) $(wildcard include/*/*.h)
+HEADERS	:= $(shell find include -type f)
 DIRS_32	:= $(patsubst src/%, obj_32/%, $(sort $(dir $(wildcard src/*/*))))
 DIRS_64	:= $(patsubst src/%, obj_64/%, $(sort $(dir $(wildcard src/*/*))))
 

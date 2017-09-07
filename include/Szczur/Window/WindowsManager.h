@@ -36,6 +36,7 @@ namespace Szczur {
 		
 		static void Add(Window* window);
 		static void Remove(Window* window);
+		static void RemoveAll();
 		
 		static void SetActive(Window* window);
 		static Window* GetActive();

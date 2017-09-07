@@ -97,7 +97,7 @@ namespace Szczur {
 		}
 		
 		if (key == Input::KEY_Return) {
-			if (option == 0) { new Window_Map; Close(); }
+			if (option == 0) { new Window_Map(); Close(); }
 			if (option == 2 && animMode == 0) { time = 0; animMode = 1; }
 			if (option == 2 && animMode == 2) { time = 1; animMode = 3; }
 			if (option == options_count-1) Game::Close();

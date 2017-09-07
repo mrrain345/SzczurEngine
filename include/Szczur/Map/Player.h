@@ -25,7 +25,6 @@ namespace Szczur {
 		int height;
 		
 	public:
-		sf::Texture texture; //TODO: ContentManager
 		sf::Sprite sprite;
 		bool lockMove;
 		
@@ -33,5 +32,7 @@ namespace Szczur {
 		void Draw();
 		
 		void Update();
+		
+		~Player();
 	};
 }

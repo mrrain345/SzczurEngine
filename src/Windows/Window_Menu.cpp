@@ -50,7 +50,7 @@ namespace Szczur {
 		}
 
 		if (key == Input::KEY_Return) {
-			if (option == 0) { activeOption = option; activeWindow = new Window_Items; }
+			if (option == 0) { activeOption = option; activeWindow = new Window_Items(); }
 			if (option == options_count - 1) Game::Close();
 		}
 	}

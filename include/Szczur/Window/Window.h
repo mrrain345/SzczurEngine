@@ -46,5 +46,7 @@ namespace Szczur {
 		virtual void OnMouseRelease	(Input::Button button) {}
 		virtual void OnMouseClick	(Input::Button button) {}
 		virtual void OnMouseMove	(int x, int y) {}
+		
+		virtual ~Window() {};
 	};
 }

@@ -60,7 +60,6 @@ namespace Szczur {
 	Vector2 Window::WindowToGlobalCoords(Vector2 coords) { return coords + Position(); }
 	
 	void Window::Close() {
-		OnClosed();
 		WindowsManager::Remove(this);
 	};
 	

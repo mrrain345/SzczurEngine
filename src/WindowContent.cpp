@@ -3,7 +3,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
-#if CSFML_VERSION_MINOR < 4
+#if SFML_VERSION_MINOR < 4
 	#define TEXT_SET_COLOR(text, color) text.setColor(color)
 #else
 	#define TEXT_SET_COLOR(text, color) text.setFillColor(color)
@@ -40,27 +40,18 @@ namespace Szczur {
 	}
 	
 	void WindowContent::DrawText(Vector2 position, const char* str, unsigned int fontSize) {
-		sf::Text text(str, Game::defaultFont, fontSize);
-		text.setPosition(position + window->Position());
-		TEXT_SET_COLOR(text, textColor);
-		Game::Draw(text);
+		DrawText(position, std::string(str), Content::DefaultFont(), fontSize);
 	}
 	
-	void WindowContent::DrawText(Vector2 position, const char* str, sf::Font font, unsigned int fontSize) {
-		sf::Text text(str, font, fontSize);
-		text.setPosition(position + window->Position());
-		TEXT_SET_COLOR(text, textColor);
-		Game::Draw(text);
+	void WindowContent::DrawText(Vector2 position, const char* str, sf::Font& font, unsigned int fontSize) {
+		DrawText(position, std::string(str), font, fontSize);
 	}
 	
 	void WindowContent::DrawText(Vector2 position, sf::String str, unsigned int fontSize) {
-		sf::Text text(str, Game::defaultFont, fontSize);
-		text.setPosition(position + window->Position());
-		TEXT_SET_COLOR(text, textColor);
-		Game::Draw(text);
+		DrawText(position, str, Content::DefaultFont(), fontSize);
 	}
 	
-	void WindowContent::DrawText(Vector2 position, sf::String str, sf::Font font, unsigned int fontSize) {
+	void WindowContent::DrawText(Vector2 position, sf::String str, sf::Font& font, unsigned int fontSize) {
 		sf::Text text(str, font, fontSize);
 		text.setPosition(position + window->Position());
 		TEXT_SET_COLOR(text, textColor);

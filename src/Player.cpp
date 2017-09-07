@@ -3,14 +3,13 @@
 
 namespace Szczur {
 	Player::Player() {
-		texture.loadFromFile("Graphics/Characters/001-Fighter01.png");
+		sprite = Content::Character("001-Fighter01");
 		frames = 4;
 		directions = 4;
 		
-		width = texture.getSize().x / frames;
-		height = texture.getSize().y / directions;
+		width = sprite.getTexture()->getSize().x / frames;
+		height = sprite.getTexture()->getSize().y / directions;
 		
-		sprite.setTexture(texture);
 		sprite.setOrigin(width / 2, height - 10);
 		sprite.setPosition(20*32 + 16, 14*32 + 16);
 		
@@ -108,4 +107,7 @@ namespace Szczur {
 		UpdateAnim();
 	}
 	
+	Player::~Player() {
+		Content::Close(sprite);
+	}
 }

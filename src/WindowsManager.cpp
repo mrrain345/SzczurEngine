@@ -45,6 +45,10 @@ namespace Szczur {
 		Game::Refresh();
 	}
 	
+	void WindowsManager::RemoveAll() {
+		for (int i = windows.size()-1; windows.size() != 0; i--) Remove(windows.back());
+	}
+	
 	void WindowsManager::SetActive(Window* window) {
 		if (GetActive()) GetActive()->OnLostActive();
 		inputDelay = 0.2f;
