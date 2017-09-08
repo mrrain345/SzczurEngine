@@ -18,7 +18,7 @@ namespace Szczur {
 		
 		for (int i = 0; i < options_count; i++) {
 			if (i == option) content.textColor = Color::Black;
-			content.DrawText(Vector2(16, i * 32 + 16), options[i], 24);
+			content.DrawText(Vector2(16.0f, i * 32.0f + 16.0f), options[i], 24);
 			if (i == option) content.textColor = Color::White;
 		}
 	}

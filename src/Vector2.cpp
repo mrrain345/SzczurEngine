@@ -24,13 +24,13 @@ namespace Szczur {
 	}
 	
 	Vector2::Vector2(sf::Vector2i vector) {
-		this->x = vector.x;
-		this->y = vector.y;
+		this->x = float(vector.x);
+		this->y = float(vector.y);
 	}
 	
 	Vector2::Vector2(sf::Vector2u vector) {
-		this->x = vector.x;
-		this->y = vector.y;
+		this->x = float(vector.x);
+		this->y = float(vector.y);
 	}
 	
 	void Vector2::Set(float x, float y) {
@@ -47,7 +47,7 @@ namespace Szczur {
 	}
 	
 	float Vector2::Angle() {
-		return acos(x / Magnitude()) * (180/M_PI);
+		return acos(x / Magnitude()) * (180.0f / M_PI);
 	}
 	
 	
@@ -68,8 +68,8 @@ namespace Szczur {
 	}
 	
 	Vector2 Vector2::Rounded() {
-		float vx = (x >= 0) ? (int)(x + 0.5f) : (int)(x - 0.5f);
-		float vy = (y >= 0) ? (int)(y + 0.5f) : (int)(y - 0.5f);
+		float vx = float((x >= 0) ? (int)(x + 0.5f) : (int)(x - 0.5f));
+		float vy = float((y >= 0) ? (int)(y + 0.5f) : (int)(y - 0.5f));
 		return Vector2(vx, vy);
 	}
 	
@@ -93,8 +93,8 @@ namespace Szczur {
 	}
 	
 	void Vector2::Round() {
-		x = (x >= 0) ? (int)(x + 0.5f) : (int)(x - 0.5f);
-		y = (y >= 0) ? (int)(y + 0.5f) : (int)(y - 0.5f);
+		x = float((x >= 0) ? (int)(x + 0.5f) : (int)(x - 0.5f));
+		y = float((y >= 0) ? (int)(y + 0.5f) : (int)(y - 0.5f));
 	}
 	
 	void Vector2::ClampMagnitude(float maxLength) {
@@ -131,7 +131,7 @@ namespace Szczur {
 	
 	float Vector2::Angle(Vector2 vec1, Vector2 vec2) {
 		float mag = sqrt(vec1.SqrMagnitude() * vec2.SqrMagnitude());
-		return acos(Dot(vec1, vec2) / mag) * (180/M_PI);
+		return acos(Dot(vec1, vec2) / mag) * (180.0f / M_PI);
 	}
 	
 	

@@ -24,10 +24,10 @@ namespace Szczur {
 		x = (Game::Width() - width) / 2;
 		y = Game::Height() - height - 64;
 		
-		start_x = x;
-		start_y = y;
+		start_x = float(x);
+		start_y = float(y);
 		end_x = 32;
-		end_y = Game::Height() - height - 32;
+		end_y = Game::Height() - height - 32.0f;
 	}
 	
 	void Window_Title::Refresh() {
@@ -39,14 +39,14 @@ namespace Szczur {
 		for (int i = 0; i < options_count; i++) {
 			if (i == option) content.textColor = Color::Black;
 			if (i == 1) content.textColor = Color(128, 128, 128);
-			content.DrawText(Vector2(x + 16, y + 16 + i*32), options[i], 24);
+			content.DrawText(Vector2(x + 16.0f, y + 16.0f + i * 32.0f), options[i], 24);
 			content.textColor = Color::White;
 		}
 	}
 	
 	static float anim_linear(float x) { return x; }
-	static float anim_cos(float x) { return -cos(x*(M_PI/2))+1; }
-	static float anim_cos2(float x) { return (-cos(x*M_PI)+1)/2; }
+	static float anim_cos(float x) { return float(-cos(x * M_PI / 2) + 1); }
+	static float anim_cos2(float x) { return float(-cos(x * M_PI) + 1) / 2; }
 	static float anim_asin(float x) { return asin(x); }
 	
 	static int animMode = 0;
@@ -57,15 +57,15 @@ namespace Szczur {
 		if (animMode == 1) time += Time::RealDeltaTime()*4;
 		if (animMode == 3) time -= Time::RealDeltaTime()*4;
 		
-		x = content.Animation(start_x, end_x, anim_cos, time);
-		y = content.Animation(start_y, end_y, anim_cos, time);
+		x = int(content.Animation(start_x, end_x, anim_cos, time));
+		y = int(content.Animation(start_y, end_y, anim_cos, time));
 		
 		if (animMode == 1) {
 			if (time > 1) {
 				animMode = 2;
 				time = 1;
-				x = end_x;
-				y = end_y;
+				x = int(end_x);
+				y = int(end_y);
 			}
 			Game::Refresh();
 		}
@@ -74,8 +74,8 @@ namespace Szczur {
 			if (time < 0) {
 				animMode = 0;
 				time = 0;
-				x = start_x;
-				y = start_y;
+				x = int(start_x);
+				y = int(start_y);
 			}
 			Game::Refresh();
 		}

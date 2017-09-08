@@ -27,8 +27,8 @@ namespace Szczur {
 	}
 	
 	void WindowContent::FillRect(Rect rect, Color color, unsigned char opacity) {
-		int width = min(rect.width, window->Width() - rect.x);
-		int height = min(rect.height, window->Height() - rect.y);
+		float width = float(min(rect.width, window->Width() - rect.x));
+		float height = float(min(rect.height, window->Height() - rect.y));
 		
 		sf::RectangleShape shape(Vector2(width, height));
 		shape.setPosition(Vector2(rect.x + window->Position().x, rect.y + window->Position().y));
