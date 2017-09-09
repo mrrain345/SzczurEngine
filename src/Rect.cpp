@@ -23,10 +23,10 @@ namespace Szczur {
 	}
 	
 	Rect::Rect(Vector2 position, Vector2 size) {
-		this->x = position.x;
-		this->y = position.y;
-		this->width = size.x;
-		this->height = size.y;
+		this->x = int(position.x);
+		this->y = int(position.y);
+		this->width = int(size.x);
+		this->height = int(size.y);
 	}
 	
 	Rect::Rect(sf::IntRect rect) {

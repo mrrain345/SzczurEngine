@@ -11,7 +11,7 @@ namespace Szczur {
 		width = sprite.getTexture()->getSize().x / frames;
 		height = sprite.getTexture()->getSize().y / directions;
 		
-		sprite.setOrigin(width / 2, height - 10);
+		sprite.setOrigin(width / 2.0f, height - 10.0f);
 		sprite.setPosition(20*32 + 16, 14*32 + 16);
 		
 		time = 0;

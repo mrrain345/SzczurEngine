@@ -26,7 +26,7 @@ namespace Szczur {
 		
 		for (int i = 0; i < options_count; i++) {
 			if (i == option) content.textColor = Color::Black;
-			content.DrawText(Vector2(48, i * 32 + 48), options[i], 24);
+			content.DrawText(Vector2(48.0f, i * 32.0f + 48.0f), options[i], 24);
 			if (i == option) content.textColor = Color::White;
 		}
 	}
@@ -69,8 +69,8 @@ namespace Szczur {
 	void Window_Menu::OnMouseClick(Input::Button button) {
 		if (button != Input::BUTTON_Left) return;
 		
-		int x = Input::GetMousePosition().x;
-		int y = Input::GetMousePosition().y;
+		int x = int(Input::GetMousePosition().x);
+		int y = int(Input::GetMousePosition().y);
 		
 		sf::IntRect rect = sf::IntRect(48, 48, 288, options_count * 32);
 		if (!rect.contains(x, y)) return;
