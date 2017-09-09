@@ -1,15 +1,28 @@
 #include <Szczur/System.h>
-#include <Szczur/Map/Map.h>
+#include <Szczur/Map.h>
+#include <Szczur/Events.h>
+#include <Szczur/Events/Commands/CMD_Message.h>
 #include <string>
 
 namespace Szczur {
 	Map::Map(const char* name) {
-		sf::String str(name);
-		backimage = Content::Sprite(std::string("Maps/" + str + "/backimage.png").c_str());
-		frontimage = Content::Sprite(std::string("Maps/" + str + "/frontimage.png").c_str());
-		collisions = Content::Image(std::string("Maps/" + str + "/collisions.png").c_str());
+		std::string str(name);
+		backimage = Content::Sprite("Maps/" + str + "/backimage.png");
+		frontimage = Content::Sprite("Maps/" + str + "/frontimage.png");
+		collisions = Content::Image("Maps/" + str + "/collisions.png");
 		
 		OffsetRecalc();
+		
+		// DEBUG BEGIN
+		std::list<EventCommand*> cmd;
+		cmd.push_back(new CMD_Message("Hello World!"));
+		cmd.push_back(new CMD_Message(sf::String(L"Jestem testowym eventem!\nPotrafie wypowiadac kilku linijkowe zdania,\nale jeszcze nie obsluguje polskich znakow ;("), 4));
+		
+		GameObject* go = new Character(345, 330, "Fighter01");
+		go->event = new Event(EventPage(cmd));
+		
+		objects.push_back(go);
+		// DEBUG END
 	}
 	
 	void Map::OffsetRecalc() {
@@ -23,10 +36,12 @@ namespace Szczur {
 	
 	void Map::DrawBack() {
 		Game::Draw(backimage);
+		for (auto object: objects) if(object->position.y <= MapManager::player->sprite.getPosition().y) object->Draw();
 	}
 	
 	void Map::DrawFront() {
 		Game::Draw(frontimage);
+		for (auto object: objects) if(object->position.y > MapManager::player->sprite.getPosition().y) object->Draw();
 	}
 	
 	bool Map::IsCollision(Vector2 pos) {
@@ -36,7 +51,17 @@ namespace Szczur {
 		if (pos.x >= size.x || pos.y >= size.y) return true;
 
 		Color col = collisions->getPixel((unsigned)pos.x, (unsigned)pos.y);
-		return ((col.r * col.g * col.b) / 3) >= 128;
+		if (col.ToGray() > 128) return true;
+		for (auto object: objects) {
+			if (object->isTrigger) continue;
+			
+			Rect rect = object->collider;
+			rect.x += object->position.x;
+			rect.y += object->position.y;
+			if (rect.Contains(pos)) return true;
+		}
+		
+		return false;
 	}
 	
 	bool Map::IsCollision(Rect rect) {
@@ -50,6 +75,8 @@ namespace Szczur {
 	}
 	
 	Map::~Map() {
+		for (auto object: objects) delete object;
+		objects.clear();
 		Content::Close(backimage);
 		Content::Close(frontimage);
 		Content::Close(collisions);

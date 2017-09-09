@@ -8,7 +8,13 @@ namespace Szczur {
 	
 	sf::Font* Content::defaultFont = 0;
 	
-	sf::Texture* Content::Texture(const char* name) {
+	sf::Texture*	Content::Texture	(const char* name) { return Texture(std::string(name)); }
+	sf::Image*		Content::Image		(const char* name) { return Image(std::string(name)); }
+	sf::Font*		Content::Font		(const char* name) { return Font(std::string(name)); }
+	sf::Sprite		Content::Sprite		(const char* name) { return Sprite(std::string(name)); }
+	sf::Sprite		Content::Character	(const char* name) { return Character(std::string(name)); }
+	
+	sf::Texture* Content::Texture(std::string name) {
 		for (auto entry: textures) {
 			if (entry->path == name) {
 				entry->count++;
@@ -17,12 +23,15 @@ namespace Szczur {
 		}
 		
 		ContentEntry<sf::Texture>* entry = new ContentEntry<sf::Texture> {std::string(name), 1, sf::Texture()};
-		entry->resource.loadFromFile(name);
+		if (!entry->resource.loadFromFile(name)) {
+			delete entry;
+			return NULL;
+		}
 		textures.push_back(entry);
 		return &entry->resource;
 	};
 
-	sf::Image* Content::Image(const char* name) {
+	sf::Image* Content::Image(std::string name) {
 		for (auto entry: images) {
 			if (entry->path == name) {
 				entry->count++;
@@ -31,12 +40,15 @@ namespace Szczur {
 		}
 		
 		ContentEntry<sf::Image>* entry = new ContentEntry<sf::Image> {std::string(name), 1, sf::Image()};
-		entry->resource.loadFromFile(name);
+		if (!entry->resource.loadFromFile(name)) {
+			delete entry;
+			return NULL;
+		}
 		images.push_back(entry);
 		return &entry->resource;
 	}
 	
-	sf::Font* Content::Font(const char* name) {
+	sf::Font* Content::Font(std::string name) {
 		for (auto entry: fonts) {
 			if (entry->path == name) {
 				entry->count++;
@@ -45,16 +57,19 @@ namespace Szczur {
 		}
 		
 		ContentEntry<sf::Font>* entry = new ContentEntry<sf::Font> {std::string(name), 1, sf::Font()};
-		entry->resource.loadFromFile(name);
+		if (!entry->resource.loadFromFile(name)) {
+			delete entry;
+			return NULL;
+		}
 		fonts.push_back(entry);
 		return &entry->resource;
 	}
 	
-	sf::Sprite Content::Sprite(const char* name) {
+	sf::Sprite Content::Sprite(std::string name) {
 		return sf::Sprite(*Texture(name));
 	}
 
-	sf::Sprite Content::Character(const char* name) {
+	sf::Sprite Content::Character(std::string name) {
 		std::string path = "Graphics/Characters/" + std::string(name) + ".png";
 		return sf::Sprite(*Texture(path.c_str()));
 	}

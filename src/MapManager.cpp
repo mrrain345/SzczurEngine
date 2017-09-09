@@ -4,11 +4,13 @@
 namespace Szczur {
 	Map* MapManager::current;
 	bool MapManager::isInitialize = false;
+	Player* MapManager::player;
 	
 	void MapManager::Init() {
 		if (isInitialize) return;
 		else isInitialize = true;
 		current = new Map("map01");
+		player = new Player();
 	}
 	
 	Map* MapManager::Current() {
@@ -19,11 +21,9 @@ namespace Szczur {
 		current = new Map(name);
 	}
 	
-	void MapManager::DrawBack() {
+	void MapManager::Draw() {
 		current->DrawBack();
-	}
-	
-	void MapManager::DrawFront() {
+		player->Draw();
 		current->DrawFront();
 	}
 	
@@ -36,6 +36,7 @@ namespace Szczur {
 	}
 	
 	void MapManager::Close() {
+		delete player;
 		delete current;
 		current = 0;
 	}

@@ -27,9 +27,11 @@ namespace Szczur {
 	public:
 		sf::Sprite sprite;
 		bool lockMove;
+		bool eventLock;
 		
 		Player();
 		void Draw();
+		Vector2 GetPosition();
 		
 		void Update();
 		

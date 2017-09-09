@@ -1,9 +1,10 @@
 #include <Szczur/System.h>
 #include <Szczur/Map.h>
+#include <iostream>
 
 namespace Szczur {
 	Player::Player() {
-		sprite = Content::Character("001-Fighter01");
+		sprite = Content::Character("Fighter01-move");
 		frames = 4;
 		directions = 4;
 		
@@ -16,6 +17,7 @@ namespace Szczur {
 		time = 0;
 		colliderRadius = 10;
 		lockMove = false;
+		eventLock = false;
 		
 		SetFrame(0, 0);
 	}
@@ -81,8 +83,13 @@ namespace Szczur {
 		Game::Draw(sprite);
 	}
 	
+	Vector2 Player::GetPosition() {
+		return sprite.getPosition();
+	}
+	
 	void Player::Update() {
-		if (lockMove) return;
+		//std::cout << "Player pos: " << sprite.getPosition().x << "x" << sprite.getPosition().y << std::endl;
+		if (lockMove || eventLock) return;
 		float distance = 4 * Time::DeltaTime();
 		
 		const float s1 = 32.0f;

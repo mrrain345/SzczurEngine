@@ -30,7 +30,7 @@ namespace Szczur {
 		int Hue();
 		unsigned char Saturation();
 		unsigned char Value();
-		unsigned char GetGray();
+		unsigned char ToGray();
 		
 		static Color HSV(int hue, unsigned char sat, unsigned char val, unsigned char alpha = 255);
 		static Color Blend(Color col1, Color col2);
@@ -48,6 +48,6 @@ namespace Szczur {
 		Color&	operator*=	(const Color& col);
 		Color&	operator/=	(const Color& col);
 		
-		operator sf::Color	();
+		operator sf::Color() const;
 	};
 }

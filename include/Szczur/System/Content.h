@@ -25,8 +25,13 @@ namespace Szczur {
 		static sf::Image*	Image		(const char* name);
 		static sf::Font*	Font		(const char* name);
 		static sf::Sprite	Sprite		(const char* name);
-		
 		static sf::Sprite	Character	(const char* name);
+		
+		static sf::Texture*	Texture		(std::string name);
+		static sf::Image*	Image		(std::string name);
+		static sf::Font*	Font		(std::string name);
+		static sf::Sprite	Sprite		(std::string name);
+		static sf::Sprite	Character	(std::string name);
 		
 		static void Close(const sf::Texture* texture);
 		static void Close(const sf::Image* image);

@@ -63,6 +63,7 @@ namespace Szczur {
 	void Game::Close() {
 		WindowsManager::RemoveAll();
 		window.close();
+		Content::Close(&Content::DefaultFont());
 		Content::DebugPrint();
 		exit(0);
 	}

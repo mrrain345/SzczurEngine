@@ -14,6 +14,7 @@ namespace Szczur {
 	
 	WindowContent::WindowContent(Window* window) {
 		this->window = window;
+		this->textColor = Color::White;
 	}
 	
 	void WindowContent::Fill(Color color, unsigned char opacity) {
