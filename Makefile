@@ -3,12 +3,12 @@ PARAMS	:=
 ARCH	:= 32
 
 CC		:= g++
-CFLAGS	:= -Iinclude -std=c++11
-LFLAGS	:= -lsfml-system -lsfml-window -lsfml-graphics
+CFLAGS	:= -Iinclude -std=c++11 -g -rdynamic
+LFLAGS	:= -lsfml-system -lsfml-window -lsfml-graphics -g -rdynamic
 
 
-OBJS_32	:= $(patsubst src/%.cpp, obj_32/%.o, $(wildcard src/*.cpp)) $(patsubst src/%.cpp, obj_32/%.o, $(wildcard src/*/*.cpp))
-OBJS_64	:= $(patsubst src/%.cpp, obj_64/%.o, $(wildcard src/*.cpp)) $(patsubst src/%.cpp, obj_64/%.o, $(wildcard src/*/*.cpp))
+OBJS_32	:= $(patsubst src/%.cpp, obj_32/%.o, $(shell find src -type f))
+OBJS_64	:= $(patsubst src/%.cpp, obj_64/%.o, $(shell find src -type f))
 HEADERS	:= $(shell find include -type f)
 DIRS_32	:= $(patsubst src/%, obj_32/%, $(sort $(dir $(wildcard src/*/*))))
 DIRS_64	:= $(patsubst src/%, obj_64/%, $(sort $(dir $(wildcard src/*/*))))
@@ -22,7 +22,7 @@ dirs32: $(DIRS_32)
 dirs64: $(DIRS_64)
 
 run: $(ARCH)
-	@(cd out && ./$(OUTPUT)_$(ARCH)bit $(PARAMS))
+	@(cd out && ./$(OUTPUT)_$(ARCH)bit $(PARAMS)) 2>&1 | c++filt
 	
 run32: 32
 	@(cd out && ./$(OUTPUT)_32bit $(PARAMS))

@@ -75,7 +75,7 @@ namespace Szczur {
 		return Max(Max(r, g), b);
 	}
 	
-	unsigned char Color::GetGray() {
+	unsigned char Color::ToGray() {
 		return (((unsigned int) r) + ((unsigned int) g) + ((unsigned int) b)) / 3;
 	}
 	
@@ -120,5 +120,5 @@ namespace Szczur {
 	Color&	Color::operator*=	(const Color& col) { r *= col.r; g *= col.g; b *= col.b; a *= col.a; return *this; }
 	Color&	Color::operator/=	(const Color& col) { r /= col.r; g /= col.g; b /= col.b; a /= col.a; return *this; }
 	
-	Color::operator sf::Color()	{ return sf::Color(r, g, b, a); }
+	Color::operator sf::Color() const { return sf::Color(r, g, b, a); }
 }
