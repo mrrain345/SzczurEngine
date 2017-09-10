@@ -14,6 +14,8 @@ namespace Szczur {
 		static bool isInitialize;
 		
 	public:
+		static bool switches[5000];
+		
 		static void Init(const char* title, int width, int height);
 		
 		static sf::RenderWindow window;

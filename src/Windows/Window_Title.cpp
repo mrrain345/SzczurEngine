@@ -1,12 +1,30 @@
 #include <Windows/Window_Title.h>
-
+#include <SFML/Graphics.hpp>
+#include <iostream>
 
 namespace Szczur {
+	static Vector2 bezier(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, float t) {
+		float mt0 = t*t*t;
+		float mt1 = (1-t) * t * t;
+		float mt2 = (1-t) * (1-t) * t;
+		float mt3 = (1-t) * (1-t) * (1-t);
+		
+		Vector2 point;
+		point.x = mt3 * p0.x + 3 * mt2 * p1.x + 3 * mt1 * p2.x + mt0 * p3.x;
+		point.y = mt3 * p0.y + 3 * mt2 * p1.y + 3 * mt1 * p2.y + mt0 * p3.y;
+		return point;
+	};
+
+
 	static int x, y, width, height;
 	static float start_x;
 	static float start_y;
 	static float end_x;
 	static float end_y;
+	
+	static Vector2 p[7];
+	static bool isPressed = false;
+	static int pointId = 0;
 
 	Window_Title::Window_Title() {
 		SetActive();
@@ -28,18 +46,88 @@ namespace Szczur {
 		start_y = float(y);
 		end_x = 32;
 		end_y = Game::Height() - height - 32.0f;
+		
+		p[0].Set(100, 100); //point 0
+		p[1].Set(100, 150); //hand 0
+		
+		p[2].Set(300, 150); //hand 1
+		p[3].Set(300, 100); //point 1
+		p[4].Set(300,  50); //hand 1
+		
+		p[5].Set(500,  50); //hand 2
+		p[6].Set(500, 100); //point 2
 	}
+	
+	static int animMode = 0;
+	static float time = 0;
 	
 	void Window_Title::Refresh() {
 		content.Fill(Color(128, 128, 128));
-		content.FillRect(sf::IntRect(x, y, width, height), Color(66, 66, 66));
 		
-		content.FillRect(sf::IntRect(x + 16,  y + 16 + option*32, width - 32, 32), Color::White);
+		// BEZIER BEGIN
+		
+		//Line 1
+		sf::VertexArray line1(sf::LinesStrip, 2);
+		for (int i = 0; i < 2; i++) {
+			line1[i].position = p[i];
+			if (isPressed && pointId == i) line1[i].color = Color::Green;
+			else line1[i].color = Color::Red;
+		}
+		Game::Draw(line1);
+		
+		//Line 2
+		sf::VertexArray line2(sf::LinesStrip, 3);
+		for (int i = 0; i < 3; i++) {
+			line2[i].position = p[i+2];
+			if (isPressed && pointId == i+2) line2[i].color = Color::Green;
+			else line2[i].color = Color::Red;
+		}
+		Game::Draw(line2);
+		
+		//Line 3
+		sf::VertexArray line3(sf::LinesStrip, 2);
+		for (int i = 0; i < 2; i++) {
+			line3[i].position = p[i+5];
+			if (isPressed && pointId == i+5) line3[i].color = Color::Green;
+			else line3[i].color = Color::Red;
+		}
+		Game::Draw(line3);
+		
+		//Bezier Curve
+		sf::VertexArray curve(sf::LinesStrip, 41);
+		for (int i = 0; i <= 40; i++) curve[i].position = bezier(p[0], p[1], p[2], p[3], i/40.0f);
+		Game::Draw(curve);
+		
+		sf::VertexArray curve2(sf::LinesStrip, 41);
+		for (int i = 0; i <= 40; i++) curve2[i].position = bezier(p[3], p[4], p[5], p[6], i/40.0f);
+		Game::Draw(curve2);
+		
+		//Handlers
+		for (int i = 0; i < 7; i++) {
+			sf::CircleShape cs(3);
+			cs.setPosition(p[i]);
+			cs.setOrigin(3, 3);
+			if (isPressed && pointId == i) cs.setFillColor(Color::Green);
+			else cs.setFillColor(Color::Red);
+			Game::Draw(cs);
+		}
+		
+		// BEZIER END
+		
+		content.FillRect(Rect(x, y, width, height), Color(44, 200));
+		content.FillRect(Rect(x + 16,  y + 16 + option*32, width - 32, 32), Color::White);
 		
 		for (int i = 0; i < options_count; i++) {
 			if (i == option) content.textColor = Color::Black;
 			if (i == 1) content.textColor = Color(128, 128, 128);
 			content.DrawText(Vector2(x + 16.0f, y + 16.0f + i * 32.0f), options[i], 24);
+			content.textColor = Color::White;
+		}
+		
+		if (animMode > 0) {
+			content.FillRect(Rect(Game::Width()/2 - 250, Game::Height()/2-50, 500, 100), Color(44, 200*time));
+			content.textColor = Color(255, 255*time);
+			content.DrawText(Vector2(Game::Width()/2 - 250+32, Game::Height()/2-50+32), L"Ustawień nie ma ale też jest zajebiście ;)", 24);
 			content.textColor = Color::White;
 		}
 	}
@@ -48,9 +136,6 @@ namespace Szczur {
 	static float anim_cos(float x) { return float(-cos(x * M_PI / 2) + 1); }
 	static float anim_cos2(float x) { return float(-cos(x * M_PI) + 1) / 2; }
 	static float anim_asin(float x) { return asin(x); }
-	
-	static int animMode = 0;
-	static float time = 0;
 	
 	void Window_Title::Update() {
 		if (animMode == 0) return;
@@ -81,15 +166,48 @@ namespace Szczur {
 		}
 	}
 	
+	void Window_Title::OnMousePress(Input::Button button) {
+		if (button != Input::BUTTON_Left) return;
+		Vector2 pos = Input::GetMousePosition();
+		
+		static int offset = 7;
+		
+		for (int i = 0; i < 7; i++) {
+			if (Rect(p[i].x-offset, p[i].y-offset, 6+offset, 6+offset).Contains(pos)) {
+				isPressed = true;
+				pointId = i;
+				Game::Refresh();
+			}
+		}
+	}
+	
+	void Window_Title::OnMouseMove(int x, int y) {
+		if (!isPressed) return;
+		Vector2 pos = Input::GetMousePosition();
+		p[pointId].Set(x, y);
+		if (Input::IsKeyReleased(Input::KEY_LShift)) {
+			if (pointId == 2)		p[4] = p[3] + (p[3] - p[2]);
+			else if (pointId == 4)	p[2] = p[3] + (p[3] - p[4]);
+		}
+		Game::Refresh();
+	}
+	
+	void Window_Title::OnMouseRelease(Input::Button button) {
+		if (isPressed) Game::Refresh();
+		isPressed = false;
+	}
+	
 	void Window_Title::OnKeyPress(Input::Key key) {
-		if (key == Input::KEY_Up && option > 0) {
+		if (key == Input::KEY_Up) {
 			option--;
+			if (option < 0) option = options_count-1;
 			if (option == 1) option--;
 			Game::Refresh();
 		}
 		
-		if (key == Input::KEY_Down && option < options_count-1) {
+		if (key == Input::KEY_Down) {
 			option++;
+			if (option >= options_count) option = 0;
 			if (option == 1) option++;
 			Game::Refresh();
 		}

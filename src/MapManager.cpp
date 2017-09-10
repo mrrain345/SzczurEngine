@@ -25,6 +25,8 @@ namespace Szczur {
 		current->DrawBack();
 		player->Draw();
 		current->DrawFront();
+		
+		
 	}
 	
 	bool MapManager::IsCollision(Vector2 pos) {

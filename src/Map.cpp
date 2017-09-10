@@ -1,7 +1,9 @@
 #include <Szczur/System.h>
 #include <Szczur/Map.h>
 #include <Szczur/Events.h>
+#include <Szczur/Events/EventConditions.h>
 #include <Szczur/Events/Commands/CMD_Message.h>
+#include <Szczur/Events/Commands/CMD_SetSwitch.h>
 #include <string>
 
 namespace Szczur {
@@ -14,14 +16,27 @@ namespace Szczur {
 		OffsetRecalc();
 		
 		// DEBUG BEGIN
-		std::list<EventCommand*> cmd;
-		cmd.push_back(new CMD_Message("Hello World!"));
-		cmd.push_back(new CMD_Message(sf::String(L"Jestem testowym eventem!\nPotrafie wypowiadac kilku linijkowe zdania,\nale jeszcze nie obsluguje polskich znakow ;("), 4));
+		std::list<EventCommand*> cmd1;
+		cmd1.push_back(new CMD_Message("Hello World!"));
+		cmd1.push_back(new CMD_Message(L"Jestem testowym eventem!\nPotrafie wypowiadać kilku linijkowe zdania\ni już obsluguję polskie znaki :)", 4));
+		cmd1.push_back(new CMD_SetSwitch(0));
 		
-		GameObject* go = new Character(345, 330, "Fighter01");
-		go->event = new Event(EventPage(cmd));
+		std::list<EventCommand*> cmd2;
+		cmd2.push_back(new CMD_Message("Witaj ponownie :)"));
+		
+		GameObject* go = new Character(345, 330, "Fighter02");
+		go->event = new Event(EventPage(cmd1));
+		go->event->AddPage(EventPage(new EventConditions(Event::START_ButtonPress, 0, true), cmd2));
 		
 		objects.push_back(go);
+		std::list<EventCommand*> cmd3;
+		cmd3.push_back(new CMD_Message(L"Dzień dobry /)\nPozdrawiam stream!", 0.4f));
+		
+		
+		GameObject* go2 = new Character(245, 330, "Fighter03");
+		go2->event = new Event(EventPage(cmd3));
+		
+		objects.push_back(go2);
 		// DEBUG END
 	}
 	

@@ -11,13 +11,14 @@ namespace Szczur {
 	
 	void Window_Message::Refresh() {
 		content.Fill(Color::Black, 192);
-		content.DrawText(Vector2(32, 32), message->msg.substr(0, letters), 24);
+		content.DrawText(Vector2(32, 32), message->msg.substring(0, letters), 24);
 	}
 	
 	void Window_Message::Update() {
 		time += Time::DeltaTime();
-		int letters = message->msg.length() * time / maxTime;
-		if (letters > message->msg.length()) letters = message->msg.length();
+		int size = message->msg.getSize();
+		int letters = size * time / maxTime;
+		if (letters > size) letters = size;
 		
 		if (this->letters != letters) {
 			this->letters = letters;

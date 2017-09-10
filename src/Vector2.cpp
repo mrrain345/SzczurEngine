@@ -153,6 +153,8 @@ namespace Szczur {
 	bool Vector2::operator>=	(const Vector2& vec)	{ return (x - vec.x >= -1e-5 && y - vec.y >= -1e-5); }
 	bool Vector2::operator<=	(const Vector2& vec)	{ return (x - vec.x <=  1e-5 && y - vec.y <=  1e-5); }
 	
+	Vector2 Vector2::operator-	()	{ return Vector2(-x, -y); }
+	
 	Vector2::operator sf::Vector2f() { return sf::Vector2f(x, y); }
 	Vector2::operator sf::Vector2i() { return sf::Vector2i(x, y); }
 	

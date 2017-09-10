@@ -1,15 +1,17 @@
 #pragma once
 #include <Szczur/Events/EventCommand.h>
+#include <SFML/System/String.hpp>
 
 namespace Szczur {
 	class CMD_Message :public EventCommand {
 	public:
-		std::string msg;
+		sf::String msg;
 		float time;
 		int runState;
 		
 		CMD_Message(const char* msg, float time = 1);
-		CMD_Message(std::string msg, float time = 1);
+		CMD_Message(const wchar_t* msg, float time = 1);
+		CMD_Message(sf::String msg, float time = 1);
 		
 		void run(int& index);
 	};

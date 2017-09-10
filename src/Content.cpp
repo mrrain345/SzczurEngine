@@ -117,15 +117,23 @@ namespace Szczur {
 	}
 	
 	void Content::DebugPrint() {
+		if (textures.size() == 0 && images.size() == 0 && fonts.size() == 0) return;
+		
 		std::cout << "Cached Content:" << std::endl;
 		
-		std::cout << " Textures(" << textures.size() << ")" << std::endl;
-		for (auto entry: textures) std::cout << "  [" << entry->count << "] " << entry->path << std::endl;
+		if (textures.size()) {
+			std::cout << " Textures(" << textures.size() << ")" << std::endl;
+			for (auto entry: textures) std::cout << "  [" << entry->count << "] " << entry->path << std::endl;
+		}
 		
-		std::cout << " Images(" << images.size() << ")" << std::endl;
-		for (auto entry: images) std::cout << "  [" << entry->count << "] " << entry->path << std::endl;
+		if (images.size()) {
+			std::cout << " Images(" << images.size() << ")" << std::endl;
+			for (auto entry: images) std::cout << "  [" << entry->count << "] " << entry->path << std::endl;
+		}
 		
-		std::cout << " Fonts(" << fonts.size() << ")" << std::endl;
-		for (auto entry: fonts) std::cout << "  [" << entry->count << "] " << entry->path << std::endl;
+		if (fonts.size()) {
+			std::cout << " Fonts(" << fonts.size() << ")" << std::endl;
+			for (auto entry: fonts) std::cout << "  [" << entry->count << "] " << entry->path << std::endl;
+		}
 	}
 }

@@ -8,8 +8,8 @@ namespace Szczur {
 	void Character::RefreshDir() {}
 	
 	Character::Character(float x, float y, const char* name) :GameObject(x, y) {
-		idle_sprite = Content::Character(std::string(name) + "-idle");
-		move_sprite = Content::Character(std::string(name) + "-move");
+		idle_sprite = Content::Character(name);
+		move_sprite = Content::Character(name);
 		idle_frames = 4;
 		move_frames = 4;
 		directions = 4;

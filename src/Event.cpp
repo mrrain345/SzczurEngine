@@ -1,4 +1,5 @@
 #include <Szczur/Events/Event.h>
+#include <Szczur/Events/EventPage.h>
 
 namespace Szczur {
 	Event::Event() {}
@@ -24,7 +25,7 @@ namespace Szczur {
 		
 		if (active != NULL) {
 			nextCmd = active->runEvent();
-			if (nextCmd == -1 || nextCmd >= 2) {
+			if (nextCmd == -1) {
 				active = NULL;
 				nextCmd = 0;
 				return false;
@@ -33,7 +34,7 @@ namespace Szczur {
 		}
 		
 		for (std::list<EventPage>::reverse_iterator page = pages.rbegin(); page != pages.rend(); page++) {
-			if (page->checkConditions()) {
+			if (page->checkConditions(mode)) {
 				active = &(*page);
 				nextCmd = 0;
 				nextCmd = page->runEvent();

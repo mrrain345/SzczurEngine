@@ -65,6 +65,8 @@ namespace Szczur {
 		bool operator>=		(const Vector2& vec);
 		bool operator<=		(const Vector2& vec);
 		
+		Vector2 operator-	();
+		
 		operator sf::Vector2f();
 		operator sf::Vector2i();
 	};

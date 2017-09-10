@@ -1,6 +1,6 @@
+#include <Szczur/Events/Event.h>
 #include <Szczur/Events/EventPage.h>
 #include <Szczur/Events/EventConditions.h>
-#include <iostream>
 
 namespace Szczur {
 	EventPage::EventPage() {
@@ -42,9 +42,9 @@ namespace Szczur {
 		nextCmd = 0;
 	}
 	
-	bool EventPage::checkConditions() {
-		if (conditions == NULL) return true;
-		return conditions->check();
+	bool EventPage::checkConditions(Event::StartMode mode) {
+		if (conditions == NULL) return (mode == Event::START_ButtonPress);
+		return conditions->check(mode);
 	}
 	
 	int EventPage::runEvent() {

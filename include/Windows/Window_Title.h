@@ -16,6 +16,10 @@ namespace Szczur {
 		Window_Title();
 		void Refresh();
 		
+		void OnMousePress(Input::Button button);
+		void OnMouseMove(int x, int y);
+		void OnMouseRelease(Input::Button button);
+		
 		void OnKeyPress(Input::Key key);
 		void Update();
 	};

@@ -21,7 +21,7 @@ namespace Szczur {
 		sf::RectangleShape shape(Vector2(window->Width(), window->Height()));
 		shape.setPosition(window->Position());
 		
-		float alpha = window->Opacity()/255.0f * opacity/255.0f;
+		float alpha = window->Opacity()/255.0f * opacity/255.0f * color.a/255.0f;
 		color.a = (unsigned char)(alpha * 255);
 		shape.setFillColor(color);
 		Game::Draw(shape);
@@ -34,18 +34,26 @@ namespace Szczur {
 		sf::RectangleShape shape(Vector2(width, height));
 		shape.setPosition(Vector2(rect.x + window->Position().x, rect.y + window->Position().y));
 		
-		float alpha = window->Opacity()/255.0f * opacity/255.0f;
+		float alpha = window->Opacity()/255.0f * opacity/255.0f * color.a/255.0f;
 		color.a = (unsigned char)(alpha * 255);
 		shape.setFillColor(color);
 		Game::Draw(shape);
 	}
 	
 	void WindowContent::DrawText(Vector2 position, const char* str, unsigned int fontSize) {
-		DrawText(position, std::string(str), Content::DefaultFont(), fontSize);
+		DrawText(position, sf::String(str), Content::DefaultFont(), fontSize);
 	}
 	
 	void WindowContent::DrawText(Vector2 position, const char* str, sf::Font& font, unsigned int fontSize) {
-		DrawText(position, std::string(str), font, fontSize);
+		DrawText(position, sf::String(str), font, fontSize);
+	}
+	
+	void WindowContent::DrawText(Vector2 position, const wchar_t* str, unsigned int fontSize) {
+		DrawText(position, sf::String(str), Content::DefaultFont(), fontSize);
+	}
+	
+	void WindowContent::DrawText(Vector2 position, const wchar_t* str, sf::Font& font, unsigned int fontSize) {
+		DrawText(position, sf::String(str), font, fontSize);
 	}
 	
 	void WindowContent::DrawText(Vector2 position, sf::String str, unsigned int fontSize) {

@@ -1,8 +1,8 @@
 #pragma once
-#include <Szczur/Events/EventPage.h>
 #include <list>
 
 namespace Szczur {
+	class EventPage;
 	class Event {
 	private:
 		EventPage* active;

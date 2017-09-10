@@ -7,6 +7,8 @@ namespace Szczur {
 	int Game::height;
 	sf::RenderWindow Game::window;
 	bool Game::isInitialize = false;
+	
+	bool Game::switches[5000];
 
 	void Game::Init(const char* title, int width, int height) {
 		if (isInitialize) return;
@@ -17,6 +19,7 @@ namespace Szczur {
 		refreshFlag = true;
 		
 		window.create(sf::VideoMode(width, height), title);
+		for (int i = 0; i < 5000; i++) switches[i] = false;
 		
 		Time::Init();
 		Input::Init();

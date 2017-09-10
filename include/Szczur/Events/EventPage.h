@@ -1,4 +1,5 @@
 #pragma once
+#include <Szczur/Events/Event.h>
 #include <Szczur/Events/EventPage.h>
 #include <Szczur/Events/EventCommand.h>
 #include <list>
@@ -22,7 +23,7 @@ namespace Szczur {
 		EventPage(std::list<EventCommand*> commands);
 		EventPage(EventConditions* conditions, std::list<EventCommand*> commands);
 		
-		bool checkConditions();
+		bool checkConditions(Event::StartMode mode);
 		int runEvent();
 	};
 }
