@@ -1,36 +1,36 @@
 #include <Windows/Window_Message.h>
 
 namespace Szczur {
-	Window_Message::Window_Message(CMD_Message* message) :Window(Game::Width()/2-300, Game::Height()-200, 600, 200) {
+	Window_Message::Window_Message(CMD_Message* message) :Window(Game::width()/2-300, Game::height()-200, 600, 200) {
 		this->message = message;
 		time = 0;
 		maxTime = message->time;
 		letters = 0;
-		SetActive();
+		setActive();
 	}
 	
-	void Window_Message::Refresh() {
-		content.Fill(Color::Black, 192);
-		content.DrawText(Vector2(32, 32), message->msg.substring(0, letters), 24);
+	void Window_Message::refresh() {
+		content.fill(Color::Black, 192);
+		content.drawText(Vector2(32, 32), message->msg.substring(0, letters).toWideString().c_str(), 24);
 	}
 	
-	void Window_Message::Update() {
-		time += Time::DeltaTime();
+	void Window_Message::update() {
+		time += Time::deltaTime();
 		int size = message->msg.getSize();
 		int letters = size * time / maxTime;
 		if (letters > size) letters = size;
 		
 		if (this->letters != letters) {
 			this->letters = letters;
-			Game::Refresh();
+			Game::refresh();
 		}
 	}
 	
-	void Window_Message::OnKeyPress(Input::Key key) {
-		if (key == Input::KEY_Return || key == Input::KEY_Space) Close();
+	void Window_Message::onKeyPress(Input::Key key) {
+		if (key == Input::KEY_ENTER || key == Input::KEY_SPACE) close();
 	}
 	
-	void Window_Message::OnClosed() {
+	void Window_Message::onClosed() {
 		message->runState = 2;
 	}
 }

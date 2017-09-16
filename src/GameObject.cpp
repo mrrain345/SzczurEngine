@@ -1,31 +1,31 @@
-#include <Szczur/Map/GameObject.h>
-#include <Szczur/System.h>
+#define SZCZUR_CORE
+#include <SzczurEngine/GameObject.h>
 #include <SFML/Graphics/Sprite.hpp>
 
 namespace Szczur {
 	GameObject::GameObject() {
-		position.Set(0, 0);
-		collider.Set(-10, -10, 20, 20);
+		position.set(0, 0);
+		collider.set(-10, -10, 20, 20);
 		isTrigger = false;
 		event = NULL;
 	}
 	
 	GameObject::GameObject(Vector2 position) {
 		this->position = position;
-		collider.Set(-10, -10, 20, 20);
+		collider.set(-10, -10, 20, 20);
 		isTrigger = false;
 		event = NULL;
 	}
 	
 	GameObject::GameObject(float x, float y) {
-		position.Set(x, y);
-		collider.Set(-10, -10, 20, 20);
+		position.set(x, y);
+		collider.set(-10, -10, 20, 20);
 		isTrigger = false;
 		event = NULL;
 	}
 	
-	bool GameObject::EventTrigger(Event::StartMode mode) {
-		if (event) return event->EventTrigger(mode);
+	bool GameObject::eventTrigger(Event::StartMode mode) {
+		if (event) return event->eventTrigger(mode);
 		return false;
 	}
 	

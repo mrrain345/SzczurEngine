@@ -1,45 +1,45 @@
-#include <Szczur/System.h>
-#include <Szczur/Map.h>
+#define SZCZUR_CORE
+#include <Szczur/Types.h>
+#include <SzczurEngine/MapManager.h>
+#include <SzczurEngine/Map.h>
 
 namespace Szczur {
-	Map* MapManager::current;
+	Map* MapManager::_current;
 	bool MapManager::isInitialize = false;
 	Player* MapManager::player;
 	
-	void MapManager::Init() {
+	void MapManager::init() {
 		if (isInitialize) return;
 		else isInitialize = true;
-		current = new Map("map01");
+		_current = new Map("map01");
 		player = new Player();
 	}
 	
-	Map* MapManager::Current() {
-		return current;
+	Map* MapManager::current() {
+		return _current;
 	}
 	
-	void MapManager::Load(const char* name) {
-		current = new Map(name);
+	void MapManager::load(const char* name) {
+		_current = new Map(name);
 	}
 	
-	void MapManager::Draw() {
-		current->DrawBack();
-		player->Draw();
-		current->DrawFront();
-		
-		
+	void MapManager::draw() {
+		_current->drawBack();
+		player->draw();
+		_current->drawFront();
 	}
 	
-	bool MapManager::IsCollision(Vector2 pos) {
-		return current->IsCollision(pos);
+	bool MapManager::isCollision(Vector2 pos) {
+		return _current->isCollision(pos);
 	}
 	
-	bool MapManager::IsCollision(Rect rect) {
-		return current->IsCollision(rect);
+	bool MapManager::isCollision(Rect rect) {
+		return _current->isCollision(rect);
 	}
 	
-	void MapManager::Close() {
+	void MapManager::close() {
 		delete player;
-		delete current;
-		current = 0;
+		delete _current;
+		_current = 0;
 	}
 }

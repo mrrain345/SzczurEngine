@@ -1,4 +1,4 @@
-#include <Szczur/Events/Commands/CMD_Message.h>
+#include <SzczurEngine/Events/Commands/CMD_Message.h>
 #include <Windows/Window_Message.h>
 
 namespace Szczur {

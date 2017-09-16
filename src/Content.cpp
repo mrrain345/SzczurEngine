@@ -1,4 +1,5 @@
-#include <Szczur/System/Content.h>
+#define SZCZUR_CORE
+#include <SzczurEngine/Content.h>
 #include <iostream>
 
 namespace Szczur {
@@ -6,15 +7,15 @@ namespace Szczur {
 	std::list<Content::ContentEntry<sf::Image>*>	Content::images;
 	std::list<Content::ContentEntry<sf::Font>*>		Content::fonts;
 	
-	sf::Font* Content::defaultFont = 0;
+	sf::Font* Content::_defaultFont = NULL;
 	
-	sf::Texture*	Content::Texture	(const char* name) { return Texture(std::string(name)); }
-	sf::Image*		Content::Image		(const char* name) { return Image(std::string(name)); }
-	sf::Font*		Content::Font		(const char* name) { return Font(std::string(name)); }
-	sf::Sprite		Content::Sprite		(const char* name) { return Sprite(std::string(name)); }
-	sf::Sprite		Content::Character	(const char* name) { return Character(std::string(name)); }
+	sf::Texture*	Content::texture	(const char* name) { return texture(std::string(name)); }
+	sf::Image*		Content::image		(const char* name) { return image(std::string(name)); }
+	sf::Font*		Content::font		(const char* name) { return font(std::string(name)); }
+	sf::Sprite		Content::sprite		(const char* name) { return sprite(std::string(name)); }
+	sf::Sprite		Content::character	(const char* name) { return character(std::string(name)); }
 	
-	sf::Texture* Content::Texture(std::string name) {
+	sf::Texture* Content::texture(std::string name) {
 		for (auto entry: textures) {
 			if (entry->path == name) {
 				entry->count++;
@@ -31,7 +32,7 @@ namespace Szczur {
 		return &entry->resource;
 	};
 
-	sf::Image* Content::Image(std::string name) {
+	sf::Image* Content::image(std::string name) {
 		for (auto entry: images) {
 			if (entry->path == name) {
 				entry->count++;
@@ -48,7 +49,7 @@ namespace Szczur {
 		return &entry->resource;
 	}
 	
-	sf::Font* Content::Font(std::string name) {
+	sf::Font* Content::font(std::string name) {
 		for (auto entry: fonts) {
 			if (entry->path == name) {
 				entry->count++;
@@ -65,16 +66,16 @@ namespace Szczur {
 		return &entry->resource;
 	}
 	
-	sf::Sprite Content::Sprite(std::string name) {
-		return sf::Sprite(*Texture(name));
+	sf::Sprite Content::sprite(std::string name) {
+		return sf::Sprite(*texture(name));
 	}
 
-	sf::Sprite Content::Character(std::string name) {
+	sf::Sprite Content::character(std::string name) {
 		std::string path = "Graphics/Characters/" + std::string(name) + ".png";
-		return sf::Sprite(*Texture(path.c_str()));
+		return sf::Sprite(*texture(path.c_str()));
 	}
 
-	void Content::Close(const sf::Texture* texture) {
+	void Content::close(const sf::Texture* texture) {
 		for (auto entry: textures) {
 			if (&entry->resource == texture) {
 				entry->count--;
@@ -85,7 +86,7 @@ namespace Szczur {
 		std::cout << "You're trying to close unopened texture!" << std::endl;
 	}
 	
-	void Content::Close(const sf::Image* image) {
+	void Content::close(const sf::Image* image) {
 		for (auto entry: images) {
 			if (&entry->resource == image) {
 				entry->count--;
@@ -96,7 +97,7 @@ namespace Szczur {
 		std::cout << "You're trying to close unopened image!" << std::endl;
 	}
 	
-	void Content::Close(const sf::Font* font) {
+	void Content::close(const sf::Font* font) {
 		for (auto entry: fonts) {
 			if (&entry->resource == font) {
 				entry->count--;
@@ -107,16 +108,16 @@ namespace Szczur {
 		std::cout << "You're trying to close unopened font!" << std::endl;
 	}
 	
-	void Content::Close(const sf::Sprite& sprite) {
-		Close(sprite.getTexture());
+	void Content::close(const sf::Sprite& sprite) {
+		close(sprite.getTexture());
 	}
 	
-	sf::Font& Content::DefaultFont() {
-		if (defaultFont == 0) defaultFont = Font("Fonts/OpenSans-Regular.ttf");
-		return *defaultFont;
+	sf::Font& Content::defaultFont() {
+		if (_defaultFont == 0) _defaultFont = font("Fonts/OpenSans-Regular.ttf");
+		return *_defaultFont;
 	}
 	
-	void Content::DebugPrint() {
+	void Content::debugPrint() {
 		if (textures.size() == 0 && images.size() == 0 && fonts.size() == 0) return;
 		
 		std::cout << "Cached Content:" << std::endl;

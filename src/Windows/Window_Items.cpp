@@ -1,8 +1,8 @@
-#include <Windows/Window_Items.h>
+/*#include <Windows/Window_Items.h>
 
 namespace Szczur {
 	Window_Items::Window_Items() :Window(384, 32, -32, -32) {
-		SetActive();
+		setActive();
 		option = 0;
 		options_count = 3;
 		
@@ -11,36 +11,36 @@ namespace Szczur {
 		options[2] = sf::String(L"Item 3");
 	}
 	
-	void Window_Items::Refresh() {
-		content.FillRect(sf::IntRect(0, 0, rect.width, rect.height), Color(32, 32, 32));
+	void Window_Items::refresh() {
+		content.fillRect(Rect(0, 0, rect.width, rect.height), Color(32, 32, 32));
 		
-		content.FillRect(sf::IntRect(16, option * 32 + 16, 288, 32), Color::White);
+		content.fillRect(Rect(16, option * 32 + 16, 288, 32), Color::White);
 		
 		for (int i = 0; i < options_count; i++) {
 			if (i == option) content.textColor = Color::Black;
-			content.DrawText(Vector2(16.0f, i * 32.0f + 16.0f), options[i], 24);
+			content.drawText(Vector2(16.0f, i * 32.0f + 16.0f), options[i], 24);
 			if (i == option) content.textColor = Color::White;
 		}
 	}
 	
-	void Window_Items::OnKeyPress(Input::Key key) {
-		if (key == Input::KEY_Escape) Close();
-		if (key == Input::KEY_Up && option > 0) { option--; Game::Refresh(); }
-		if (key == Input::KEY_Down && option < options_count-1) { option++; Game::Refresh(); }
+	void Window_Items::onKeyPress(Input::Key key) {
+		if (key == Input::KEY_ESCAPE) close();
+		if (key == Input::KEY_UP && option > 0) { option--; Game::refresh(); }
+		if (key == Input::KEY_DOWN && option < options_count-1) { option++; Game::refresh(); }
 
-		if (key == Input::KEY_Return) {
+		if (key == Input::KEY_ENTER) {
 			
 		}
 	}
 	
-	void Window_Items::OnMouseMove(int x, int y) {
-		sf::IntRect rect = sf::IntRect(16, 16, 288, options_count * 32);
+	void Window_Items::onMouseMove(int x, int y) {
+		Rect rect = Rect(16, 16, 288, options_count * 32);
 		if (!rect.contains(x, y)) return;
 		
 		if ((y - 16) / 32 == option) return;
 		option = (y - 16) / 32;
 		if (option < 0) option = 0;
 		if (option > options_count - 1) option = options_count - 1;
-		Game::Refresh();
+		Game::refresh();
 	}
-}
+}*/

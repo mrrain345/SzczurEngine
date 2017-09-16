@@ -7,20 +7,20 @@
 
 namespace Szczur {
 	class Window_Title :public Window {
+	public:
+		Window_Title();
+		void refresh();
+		
+		void onMousePress(Input::Button button);
+		void onMouseMove(int x, int y);
+		void onMouseRelease(Input::Button button);
+		
+		void onKeyPress(Input::Key key);
+		void update();
+		
 	private:
 		int option;
 		int options_count;
 		sf::String options[9];
-		
-	public:
-		Window_Title();
-		void Refresh();
-		
-		void OnMousePress(Input::Button button);
-		void OnMouseMove(int x, int y);
-		void OnMouseRelease(Input::Button button);
-		
-		void OnKeyPress(Input::Key key);
-		void Update();
 	};
 }

@@ -1,5 +1,5 @@
-#include <Szczur/Events/Commands/CMD_SetSwitch.h>
-#include <Szczur/System/Game.h>
+#include <SzczurEngine/Events/Commands/CMD_SetSwitch.h>
+#include <SzczurEngine/Game.h>
 
 namespace Szczur {
 	CMD_SetSwitch::CMD_SetSwitch(int id, bool val) :EventCommand("SetSwitch") {

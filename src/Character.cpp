@@ -1,15 +1,18 @@
-#include <Szczur/Map/Character.h>
+#define SZCZUR_CORE
+#include <SzczurEngine/Game.h>
+#include <SzczurEngine/Content.h>
+#include <SzczurEngine/Character.h>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics.hpp>
 #include <string>
 
 namespace Szczur {
-	void Character::SetFrame(int frame) {}
-	void Character::RefreshDir() {}
+	void Character::setFrame(int frame) {}
+	void Character::refreshDir() {}
 	
 	Character::Character(float x, float y, const char* name) :GameObject(x, y) {
-		idle_sprite = Content::Character(name);
-		move_sprite = Content::Character(name);
+		idle_sprite = Content::character(name);
+		move_sprite = Content::character(name);
 		idle_frames = 4;
 		move_frames = 4;
 		directions = 4;
@@ -21,7 +24,7 @@ namespace Szczur {
 		move_size = Vector2(size.x/move_frames, size.y/directions);
 		
 		isMoving = false;
-		velocity.Set(0, 0);
+		velocity.set(0, 0);
 		direction = 0;
 		frame = 0;
 		
@@ -35,13 +38,13 @@ namespace Szczur {
 		move_sprite.setOrigin(move_size.x/2, move_size.y - collider.height/2);
 	}
 	
-	void Character::Draw() {
-		if(isMoving) Game::Draw(move_sprite);
-		else Game::Draw(idle_sprite);
+	void Character::draw() {
+		if(isMoving) Game::draw(move_sprite);
+		else Game::draw(idle_sprite);
 	}
 	
 	Character::~Character() {
-		Content::Close(idle_sprite);
-		Content::Close(move_sprite);
+		Content::close(idle_sprite);
+		Content::close(move_sprite);
 	}
 }

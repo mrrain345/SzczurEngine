@@ -3,8 +3,8 @@ PARAMS	:=
 ARCH	:= 32
 
 CC		:= g++
-CFLAGS	:= -Iinclude -std=c++11 -g -rdynamic
-LFLAGS	:= -lsfml-system -lsfml-window -lsfml-graphics -g -rdynamic
+CFLAGS	:= -Iinclude -std=c++11 -O -g -rdynamic
+LFLAGS	:= -lsfml-system -lsfml-window -lsfml-graphics -ldl -g -rdynamic
 
 
 OBJS_32	:= $(patsubst src/%.cpp, obj_32/%.o, $(shell find src -type f))
@@ -13,8 +13,10 @@ HEADERS	:= $(shell find include -type f)
 DIRS_32	:= $(patsubst src/%, obj_32/%, $(sort $(dir $(wildcard src/*/*))))
 DIRS_64	:= $(patsubst src/%, obj_64/%, $(sort $(dir $(wildcard src/*/*))))
 
+MODULES := $(shell ls Modules)
+
 default: $(ARCH)
-32: dirs32 out/$(OUTPUT)_32bit
+32: dirs32 out/$(OUTPUT)_32bit modules
 64: dirs64 out/$(OUTPUT)_64bit
 all: 32 64
 
@@ -29,6 +31,12 @@ run32: 32
 
 run64: 64
 	@(cd out && ./$(OUTPUT)_64bit $(PARAMS))
+
+modules:
+	$(foreach mod, $(MODULES), make -C "Modules/$(mod)/";)
+	
+module-clean:
+	$(foreach mod, $(MODULES), make -C "Modules/$(mod)/" clean;)
 
 out/$(OUTPUT)_32bit: $(OBJS_32)
 	$(CC) $(OBJS_32) -o $@ $(LFLAGS) -m32
@@ -54,7 +62,7 @@ obj_32:
 obj_64:
 	@mkdir obj_64
 
-clean: clean32 clean64
+clean: clean32 clean64 module-clean
 
 clean32:
 	@if [ -e obj_32 ]; then find obj_32; rm -rf obj_32; fi

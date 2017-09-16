@@ -1,5 +1,6 @@
-#include <Szczur/Window/WindowsManager.h>
-#include <Szczur/System.h>
+#define SZCZUR_CORE
+#include <SzczurEngine/WindowsManager.h>
+#include <Szczur/Types.h>
 
 namespace Szczur {
 	std::list<Window*> WindowsManager::actives;
@@ -8,79 +9,79 @@ namespace Szczur {
 	float WindowsManager::inputDelay = 0.2f;
 	bool WindowsManager::isInitialize = false;
 	
-	void WindowsManager::Init() {
+	void WindowsManager::init() {
 		if (isInitialize) return;
 		else isInitialize = true;
 		
-		Time::Update			(Update);
-		Time::FixedUpdate		(FixedUpdate);
-		Time::RealFixedUpdate	(RealFixedUpdate);
+		Time::update			(update);
+		Time::fixedUpdate		(fixedUpdate);
+		Time::realFixedUpdate	(realFixedUpdate);
 		
-		Input::KeyPress			(OnKeyPress);
-		Input::KeyRelease		(OnKeyRelease);
-		Input::KeyClick			(OnKeyClick);
-		Input::MousePress		(OnMousePress);
-		Input::MouseRelease		(OnMouseRelease);
-		Input::MouseClick		(OnMouseClick);
-		Input::MouseMove		(OnMouseMove);
+		Input::keyPress			(onKeyPress);
+		Input::keyRelease		(onKeyRelease);
+		Input::keyClick			(onKeyClick);
+		Input::mousePress		(onMousePress);
+		Input::mouseRelease		(onMouseRelease);
+		Input::mouseClick		(onMouseClick);
+		Input::mouseMove		(onMouseMove);
 	}
 	
-	int WindowsManager::Count() {
+	int WindowsManager::count() {
 		return windows.size();
 	}
 	
-	void WindowsManager::Add(Window* window) {
+	void WindowsManager::add(Window* window) {
 		windows.push_back(window);
-		Game::Refresh();
+		Game::refresh();
 	}
 	
-	void WindowsManager::Remove(Window* window) {
-		window->OnClosed();
-		bool active = GetActive() == window;
+	void WindowsManager::remove(Window* window) {
+		window->onClosed();
+		bool active = (getActive() == window);
 		actives.remove(window);
 		windows.remove(window);
 		delete window;
 		inputDelay = 0.2f;
-		if (active && GetActive()) GetActive()->OnGainActive();
-		Game::Refresh();
+		if (active && getActive()) getActive()->onGainActive();
+		Game::refresh();
 	}
 	
-	void WindowsManager::RemoveAll() {
-		for (int i = windows.size()-1; windows.size() != 0; i--) Remove(windows.back());
+	void WindowsManager::removeAll() {
+		for (int i = windows.size()-1; windows.size() != 0; i--) remove(windows.back());
 	}
 	
-	void WindowsManager::SetActive(Window* window) {
-		if (GetActive()) GetActive()->OnLostActive();
+	void WindowsManager::setActive(Window* window) {
+		if (getActive()) getActive()->onLostActive();
 		inputDelay = 0.2f;
 		actives.push_back(window);
-		window->OnGainActive();
+		window->onGainActive();
 	}
 	
-	Window* WindowsManager::GetActive() {
+	Window* WindowsManager::getActive() {
 		if (actives.size() == 0) return 0;
 		return actives.back();
 	}
 	
-	void WindowsManager::Refresh() {
-		for (auto window: windows) window->Refresh();
+	void WindowsManager::refresh() {
+		for (auto window: windows) window->refresh();
 	}
 	
-	void WindowsManager::Update() {
-		if (inputDelay > 0) inputDelay -= Time::RealDeltaTime();
+	void WindowsManager::update() {
+		if (inputDelay > 0) inputDelay -= Time::realDeltaTime();
 		if (inputDelay < 0) inputDelay = 0;
 		if (inputDelay) return;
-		for (auto window: windows) window->Update();
+		for (auto window: windows) window->update();
 	}
 	
-	void WindowsManager::FixedUpdate	() { for (auto window: windows) window->FixedUpdate(); }
-	void WindowsManager::RealFixedUpdate() { for (auto window: windows) window->RealFixedUpdate(); }
+	void WindowsManager::fixedUpdate	() { for (auto window: windows) window->fixedUpdate(); }
+	void WindowsManager::realFixedUpdate() { for (auto window: windows) window->realFixedUpdate(); }
 	
-	void WindowsManager::OnKeyPress		(Input::Key key) { if (GetActive() && !inputDelay) GetActive()->OnKeyPress(key); }
-	void WindowsManager::OnKeyRelease	(Input::Key key) { if (GetActive() && !inputDelay) GetActive()->OnKeyRelease(key); }
-	void WindowsManager::OnKeyClick		(Input::Key key) { if (GetActive() && !inputDelay) GetActive()->OnKeyClick(key); }
+	void WindowsManager::onKeyPress		(Input::Key key) { if (getActive() && !inputDelay) getActive()->onKeyPress(key); }
+	void WindowsManager::onKeyRelease	(Input::Key key) { if (getActive() && !inputDelay) getActive()->onKeyRelease(key); }
+	void WindowsManager::onKeyClick		(Input::Key key) { if (getActive() && !inputDelay) getActive()->onKeyClick(key); }
 	
-	void WindowsManager::OnMousePress	(Input::Button button) { for (auto window: windows) window->OnMousePress(button); }
-	void WindowsManager::OnMouseRelease	(Input::Button button) { for (auto window: windows) window->OnMouseRelease(button); }
-	void WindowsManager::OnMouseClick	(Input::Button button) { for (auto window: windows) window->OnMouseClick(button); }
-	void WindowsManager::OnMouseMove	(int x, int y) { for (auto window: windows) window->OnMouseMove(x - window->Position().x, y - window->Position().y); }
+	void WindowsManager::onMousePress	(Input::Button button) { for (auto window: windows) window->onMousePress(button); }
+	void WindowsManager::onMouseRelease	(Input::Button button) { for (auto window: windows) window->onMouseRelease(button); }
+	void WindowsManager::onMouseClick	(Input::Button button) { for (auto window: windows) window->onMouseClick(button); }
+	void WindowsManager::onMouseMove	(int x, int y) { for (auto window: windows) window->onMouseMove(x - window->position().x, y - window->position().y); }
 }
