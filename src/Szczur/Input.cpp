@@ -1,6 +1,6 @@
-#define SZCZUR_CORE
 #include <Szczur/Input.h>
 #include <SzczurEngine/Game.h>
+#include <iostream>
 
 namespace Szczur {
 	std::list<void(*)(Input::Key)>		Input::keyPressHandlers;
@@ -25,9 +25,10 @@ namespace Szczur {
 	bool Input::isMouseReleased	(Input::Button button)	{ return !sf::Mouse::isButtonPressed((sf::Mouse::Button)button); }
 	
 	Vector2 Input::mousePosition() {
-		Vector2 pos = (Vector2)sf::Mouse::getPosition(Game::window);
-		pos.x *= (float)Game::width() / Game::window.getSize().x;
-		pos.y *= (float)Game::height() / Game::window.getSize().y;
+		Vector2 pos = sf::Mouse::getPosition(Game::window);
+#ifdef SZCZUR_EDITOR
+		pos -= Vector2(251, 49);
+#endif
 		return pos;
 	}
 	

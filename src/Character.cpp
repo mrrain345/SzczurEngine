@@ -1,4 +1,3 @@
-#define SZCZUR_CORE
 #include <SzczurEngine/Game.h>
 #include <SzczurEngine/Content.h>
 #include <SzczurEngine/Character.h>

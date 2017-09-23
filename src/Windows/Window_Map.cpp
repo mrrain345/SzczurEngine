@@ -1,6 +1,6 @@
 #include <SzczurEngine/MapManager.h>
 #include <SzczurEngine/Events/Event.h>
-#include <SzczurEngine/Module.h>
+#include <Szczur/Module.h>
 #include <Windows/Window_Map.h>
 #include <Windows/Window_Menu.h>
 #include <iostream>
@@ -29,7 +29,7 @@ namespace Szczur {
 	void Window_Map::onKeyPress(Input::Key key) {
 		if (activeEvent) return;
 		
-		if (key == Input::KEY_ESCAPE) Module::sendCommand("menu", "window-show", NULL);
+		if (key == Input::KEY_ESCAPE) Module::send("system", "menu", "window-show", NULL);
 		if (key == Input::KEY_SPACE) {
 			for (auto object: MapManager::current()->objects) {
 				if (Vector2::distance(MapManager::player->position(), object->position) <= 25) {

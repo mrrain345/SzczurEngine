@@ -1,9 +1,8 @@
-#include <Szczur/Module.h>
-#include <iostream>
-#include <stdint.h>
-#include <string>
-#include <cwchar>
+#include "Menu.h"
 #include "Window_Menu.h"
+#include <cwchar>
+#include <iostream>
+#include <string>
 
 struct CMD_OptionAdd {
 	int position;
@@ -25,7 +24,7 @@ int cmdWindowClose() {
 }
 
 int cmdOptionAdd(uint32_t sender, CMD_OptionAdd* data) {
-	MenuOption* option = new MenuOption;
+	MenuOption* option = new MenuOption();
 	option->owner = sender;
 	option->active = true;
 	option->position = data->position;
@@ -42,14 +41,7 @@ int cmdOptionRemove		(uint32_t sender, size_t id) { return MOD_BADCMD; }
 int cmdOptionActivate	(uint32_t sender, size_t id) { return MOD_BADCMD; }
 int cmdOptionDeactivate	(uint32_t sender, size_t id) { return MOD_BADCMD; }
 
-
-void module_manifest() {
-	module_author("MrRaiN");
-	module_description("Game menu");
-	module_version(0.001);
-}
-
-int module_command(uint32_t sender, uint32_t command, void* data) {
+int Module_Menu::command(uint32_t sender, uint32_t command, void* data) {
 	if (command == hash("window-show"))			return cmdWindowShow();
 	if (command == hash("window-close"))		return cmdWindowClose();
 	if (command == hash("option-add"))			return cmdOptionAdd(sender, (CMD_OptionAdd*)data);
@@ -59,7 +51,3 @@ int module_command(uint32_t sender, uint32_t command, void* data) {
 	
 	return MOD_BADCMD;
 }
-
-int module_init() { return MOD_OK; }
-
-void module_close() {}

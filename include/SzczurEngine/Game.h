@@ -1,6 +1,4 @@
 #pragma once
-#include <SzczurEngine/Module.h>
-#include <Szczur/Module/SzczurAPI.h>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Font.hpp>
@@ -31,14 +29,9 @@ namespace Szczur {
 		static int _width;
 		static int _height;
 		static bool isInitialize;
-		static std::list<Module*> modules;
-		static SzczurAPI* moduleAPI;
 		
-		static void initAPI();
-		static void modulesLoad();
-		static int moduleInit(Module* module);
-		static void modulesClose();
-		
-		static int moduleSend(uint32_t sender, uint32_t target, uint32_t command, void* data);
+		static void drawToolbar();
+		static void drawInspector();
+		static void drawGame();
 	};
 }

@@ -1,5 +1,3 @@
-#define SZCZUR_CORE
-#include <SzczurEngine/Platform.h>
 #include <SzczurEngine/WindowsManager.h>
 #include <SzczurEngine/Content.h>
 #include <Szczur/Input.h>
@@ -7,26 +5,26 @@
 #include <Windows/Window_Title.h>
 #include <iostream>
 #include <stdint.h>
+#include <SFML/Graphics.hpp>
 
-//#define MODUL_DEBUG
 
 namespace Szczur {
+	void modulesInit();
+	
 	bool Game::refreshFlag;
 	int Game::_width;
 	int Game::_height;
 	sf::RenderWindow Game::window;
 	bool Game::isInitialize = false;
-	std::list<Module*> Game::modules;
-	SzczurAPI* Game::moduleAPI;
 	
 	bool Game::switches[5000];
-
+	
 	void Game::init(const char* title, int width, int height) {
 		if (isInitialize) return;
 		else isInitialize = true;
 	
-		Game::_width = width;
-		Game::_height = height;
+		Game::_width = 1120;
+		Game::_height = 640;
 		refreshFlag = true;
 		
 		window.create(sf::VideoMode(width, height), title);
@@ -36,169 +34,85 @@ namespace Szczur {
 		Input::init();
 		WindowsManager::init();
 		
-		initAPI();
-		modulesLoad();
+		Szczur::modulesInit();
 		
-		new Window_Title;
+		new Window_Title();
+		
 		loop();
-	}
-	
-	void Game::initAPI() {
-		moduleAPI = new SzczurAPI;
-		
-		moduleAPI->game_width					= Game::width;
-		moduleAPI->game_height					= Game::height;
-		moduleAPI->game_refresh					= Game::refresh;
-		moduleAPI->game_draw					= Game::draw;
-		moduleAPI->game_close					= Game::close;
-
-		moduleAPI->input_isKeyPressed			= Input::isKeyPressed;
-		moduleAPI->input_isKeyReleased			= Input::isKeyReleased;
-		moduleAPI->input_isMousePressed			= Input::isMousePressed;
-		moduleAPI->input_isMouseReleased		= Input::isMouseReleased;
-		moduleAPI->input_mousePosition			= Input::mousePosition;
-
-		moduleAPI->input_keyPress				= Input::keyPress;
-		moduleAPI->input_keyRelease				= Input::keyRelease;
-		moduleAPI->input_keyClick				= Input::keyClick;
-		moduleAPI->input_mousePress				= Input::mousePress;
-		moduleAPI->input_mouseRelease			= Input::mouseRelease;
-		moduleAPI->input_mouseClick				= Input::mouseClick;
-		moduleAPI->input_mouseMove				= Input::mouseMove;
-		moduleAPI->input_resize					= Input::resize;
-
-		moduleAPI->time_time					= Time::time;
-		moduleAPI->time_deltaTime				= Time::deltaTime;
-		moduleAPI->time_realTime				= Time::realTime;
-		moduleAPI->time_realDeltaTime			= Time::realDeltaTime;
-		moduleAPI->time_fixedInterval			= Time::fixedInterval;
-		
-		moduleAPI->time_speed_set				= Time::speed;
-		moduleAPI->time_speed_get				= Time::speed;
-
-		moduleAPI->time_update					= Time::update;
-		moduleAPI->time_fixedUpdate				= Time::fixedUpdate;
-		moduleAPI->time_realFixedUpdate			= Time::realFixedUpdate;
-
-		moduleAPI->windowsManager_add			= WindowsManager::add;
-		moduleAPI->windowsManager_remove		= WindowsManager::remove;
-
-		moduleAPI->windowsManager_setActive		= WindowsManager::setActive;
-		moduleAPI->windowsManager_getActive		= WindowsManager::getActive;
-
-		moduleAPI->module_send					= Game::moduleSend;
-	}
-	
-	int Game::moduleSend(uint32_t sender, uint32_t target, uint32_t command, void* data) {
-		for (auto module: modules) {
-			if (module->hash() == target) return module->send(sender, command, data);
-		}
-		return MOD_NOTFOUND;
-	}
-	
-	void Game::modulesLoad() {
-		std::list<std::string> moduleNames = listModules();
-		for (auto moduleName: moduleNames) {
-			#if MODULE_DEBUG
-			std::cout << "Load module: '" << moduleName << "'";
-			#endif
-			Module* module = new Module(moduleName);
-			#if MODULE_DEBUG
-			std::cout << " (0x" << std::hex << module->hash() << ")" << std::endl;
-			#endif
-			modules.push_back(module);
-		}
-		
-		for (auto module: modules) {
-			if (moduleInit(module) < 0) {
-				modules.remove(module);
-				delete module;
-			}
-		}
-	}
-	
-	int Game::moduleInit(Module* module) {
-		if (module->initialized()) return MOD_OK;
-		#if MODULE_DEBUG
-		std::cout << std::endl << " *** Starting initialization of the module: " << module->fullname() << std::endl;
-		#endif
-		
-		if (module->dependsTest) {
-			std::cout << "ERROR: Dependencies loop in the module: '" << module->name() << "'" << std::endl;
-			return MOD_DEPENDSLOOP;
-		}
-		
-		ModuleManifest* manifest = module->manifest();
-		
-		if (manifest != NULL && manifest->required.size() > 0) {
-			#if MODULE_DEBUG
-			std::cout << "Solving required dependencies" << std::endl;
-			#endif
-			for (auto hash: manifest->required) {
-				bool complete = false;
-				for (auto required: modules) {
-					if (hash != required->hash()) continue;
-					if (required->initialized()) break;
-					#if MODULE_DEBUG
-					std::cout << "Starting initialization of required module: '" << required->name() << "'" << std::endl;
-					#endif
-					if (moduleInit(required) < 0) {
-						std::cout << " ** ERROR: Module: '" << module->name() << "' wasn't loaded because of initialization fault of required module: '" << required->name() << "'" << std::endl;
-						modules.remove(module);
-						return MOD_INITFAULT;
-					}
-					#if MODULE_DEBUG
-					std::cout << std::endl << " *** Initialization of required module '" << required->name() << "' complete. Back to the resolving dependencies of module: '" << module->name() << "'" << std::endl;
-					#endif
-					complete = true;
-				}
-				if (complete) continue;
-				std::cout << " ** ERROR: Module: '" << module->name() << "' didn't load because of didn't find required module (0x" << std::hex << hash << ")" << std::endl;
-				modules.remove(module);
-				return MOD_INITFAULT;
-			}
-		}
-		
-		if (manifest != NULL && manifest->recommended.size() > 0) {
-			#if MODULE_DEBUG
-			std::cout << "Solving recommended dependencies" << std::endl;
-			#endif
-			for (auto hash: manifest->recommended) {
-				for (auto recommended: modules) {
-					if (hash != recommended->hash()) continue;
-					if (recommended->initialized()) break;
-					if (moduleInit(recommended) < 0) {
-						#if MODULE_DEBUG
-						std::cout << " * Recommended module: '" << recommended->name() << "' by module: '" << module->name() << "' wasn't loaded" << std::endl;
-						#endif
-					}
-					break;
-				}
-				#if MODULE_DEBUG
-				std::cout << " * Recommended module (0x" << std::hex << hash << ") by module: '" << module->name() << "' wasn't found" << std::endl;
-				#endif
-			}
-		}
-		
-		#if MODULE_DEBUG
-		std::cout << " * Initialization of the module: '" << module->name() << "'" << std::endl;
-		#endif
-		int ret = module->init(moduleAPI);
-		if (ret < 0) {
-			std::cout << " *** ERROR[" << ret << "]: Error during initialization of the module: '" << module->name() << "'" << std::endl;
-			return MOD_INITFAULT;
-		}
-		return MOD_OK;
-	}
-	
-	void Game::modulesClose() {
-		for (auto module: modules) delete module;
-		modules.clear();
-		delete moduleAPI;
 	}
 	
 	void Game::refresh() {
 		refreshFlag = true;
+	}
+	
+#ifdef SZCZUR_EDITOR
+	static void toolButton(float pos, int align = 0) {
+		sf::RectangleShape button(Vector2(32, 32));
+		button.setOrigin(16, 16);
+		
+		if(align == 0) button.setPosition(pos*48 + 24, 24);
+		if(align == 1) button.setPosition(Game::window.getSize().x/2 + pos*48, 24);
+		if(align == 2) button.setPosition(Game::window.getSize().x - pos*48 - 24, 24);
+		
+		button.setFillColor(Color(128));
+		button.setOutlineColor(Color(64));
+		button.setOutlineThickness(1);
+		Game::draw(button);
+	}
+	
+	void Game::drawToolbar() {
+		Vector2 size = window.getSize();
+
+		sf::View view(sf::FloatRect(0, 0, size.x, 49));
+		view.setViewport(sf::FloatRect(0, 0, 1, 49/size.y));
+		window.setView(view);
+		
+		sf::RectangleShape bground(Vector2(size.x, 48));
+		bground.setPosition(0, 0);
+		bground.setFillColor(Color(192));
+		bground.setOutlineColor(Color(128));
+		bground.setOutlineThickness(1);
+		draw(bground);
+		
+		toolButton(0);
+		toolButton(1);
+		toolButton(2);
+		
+		toolButton(-1, 1);
+		toolButton(0, 1);
+		toolButton(1, 1);
+		
+		toolButton(0, 2);
+		toolButton(1, 2);
+		toolButton(2, 2);
+	}
+	
+	void Game::drawInspector() {
+		Vector2 size = window.getSize();
+
+		sf::View view(sf::FloatRect(0, 0, 251, size.y));
+		view.setViewport(sf::FloatRect(0, 49/size.y, 251/size.x, 1));
+		window.setView(view);
+		
+		sf::RectangleShape bground(Vector2(250, size.y-49));
+		bground.setPosition(0, 0);
+		bground.setFillColor(Color(172));
+		bground.setOutlineColor(Color(128));
+		bground.setOutlineThickness(1);
+		draw(bground);
+	}
+#endif
+	
+	void Game::drawGame() {
+#ifdef SZCZUR_EDITOR
+		Vector2 size = window.getSize();
+
+		sf::View view(sf::FloatRect(0, 0, _width, _height));
+		view.setViewport(sf::FloatRect(251/size.x, 49/size.y, _width/size.x, _height/size.y));
+		window.setView(view);
+#endif
+		
+		WindowsManager::refresh();
 	}
 	
 	void Game::loop() {
@@ -220,10 +134,17 @@ namespace Szczur {
 			
 			if(refreshFlag) {
 				refreshFlag = false;
-				window.clear();
-				WindowsManager::refresh();
+				window.clear(Color(255));
+#ifdef SZCZUR_EDITOR
+				drawToolbar();
+				drawInspector();
+#endif
+				drawGame();
 				window.display();
 			}
+			
+			//toolbar.clear();
+			//toolbar.display();
 		}
 	}
 
@@ -232,7 +153,6 @@ namespace Szczur {
 	}
 
 	void Game::close() {
-		modulesClose();
 		WindowsManager::removeAll();
 		window.close();
 		Content::close(&Content::defaultFont());

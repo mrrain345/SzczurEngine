@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include <cstddef>
 
 template<size_t N, size_t I=0>
 struct hash_calc {

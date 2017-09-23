@@ -1,17 +1,12 @@
 #pragma once
 #include <Szczur/Vector2.h>
 #include <list>
-
-#ifdef SZCZUR_CORE
 #include <SFML/Window.hpp>
-#endif
 
 namespace Szczur {
 	class InputEvents;
 	class Input {
-#ifdef SZCZUR_CORE
 		friend class Game;
-#endif
 		friend class InputEvents;
 	
 	public:
@@ -162,7 +157,6 @@ namespace Szczur {
 		static void registerHandler		(InputEvents* handler);
 		static void unregisterHandler	(InputEvents* handler);
 		
-#ifdef SZCZUR_CORE
 		static std::list<void(*)(Key)>		keyPressHandlers;
 		static std::list<void(*)(Key)>		keyReleaseHandlers;
 		static std::list<void(*)(Key)>		keyClickHandlers;
@@ -185,7 +179,6 @@ namespace Szczur {
 		static void onMouseReleased		(sf::Event event);
 		static void onMouseMoved		(sf::Event event);
 		static void onResized			(sf::Event event);
-#endif
 	};
 	
 	class InputEvents {

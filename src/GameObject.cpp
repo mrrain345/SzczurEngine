@@ -1,4 +1,3 @@
-#define SZCZUR_CORE
 #include <SzczurEngine/GameObject.h>
 #include <SFML/Graphics/Sprite.hpp>
 

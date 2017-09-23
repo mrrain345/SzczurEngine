@@ -1,77 +1,32 @@
-#include <SzczurEngine/Module.h>
-#include <SzczurEngine/Platform.h>
-#include <cstring>
-#include <stdint.h>
-#include <SzczurEngine/Game.h>
+#include <Szczur/Module.h>
 
 namespace Szczur {
-	Module::Module(std::string name) {
-		isInitialize = false;
-		dependsTest = false;
-		_name = name;
-		
-		size_t len = name.size() + 1;
-		char* str = new char[len];
-		
-		memcpy(str, name.c_str(), len);
-		_hash = ::hash(str, len);
-		delete[] str;
-		
-		handle = modopen(name.c_str());
-		
-		_manifest	= (void*(*)())							dlsym(handle, "_module_manifest");
-		_init		= (int	(*)(void*, uint32_t))			dlsym(handle, "_module_init");
-		_close		= (void	(*)())							dlsym(handle, "_module_close");
-		_command	= (int	(*)(uint32_t, uint32_t, void*))	dlsym(handle, "_module_command");
+	std::list<Module*> Module::_modules;
+	
+	const char* Module::getName() {
+		return _name;
 	}
 	
-	const char* Module::name() {
-		return _name.c_str();
-	}
-	
-	std::string Module::fullname() {
-		ModuleManifest* man = manifest();
-		std::string fullname = "'" + _name + "'" +
-		((man->version != 0) ? " v" + std::to_string(man->version) : "") +
-		((!man->author.empty()) ? " by <" + man->author + ">" : "");
-		return fullname;
-	}
-	
-	unsigned int Module::hash() {
+	uint32_t Module::getHash() {
 		return _hash;
 	}
 	
-	bool Module::initialized() {
-		return isInitialize;
-	}
+	int Module::command(uint32_t sender, uint32_t command, void* data) { return MOD_BADCMD; }
 	
 	Module::~Module() {
-		close();
-		dlclose(handle);
+		_modules.remove(this);
+		delete[] _name;
 	}
 	
-	ModuleManifest* Module::manifest() {
-		return (ModuleManifest*) _manifest();
+	int Module::send(uint32_t sender, uint32_t target, uint32_t command, void* data) {
+		for (auto module: _modules) {
+			if (target != module->getHash()) continue;
+			return module->command(sender, command, data);
+		}
+		return MOD_NOTFOUND;
 	}
-	
-	int Module::init(SzczurAPI* api) {
-		if (isInitialize) return MOD_REINIT;
-		isInitialize = true;
-		return _init((void*)api, _hash);
+
+	int Module::send(uint32_t target, uint32_t command, void* data) { 
+		return send(_hash, target, command, data);
 	}
-	
-	void Module::close() {
-		if (!isInitialize) return;
-		_close();
-	}
-	
-	int Module::send(uint32_t sender, uint32_t command, void* data) {
-		if (!isInitialize) return MOD_NOTINIT;
-		return _command(sender, command, data);
-	}
-	
-	int Module::sendCommand(uint32_t target, uint32_t command, void* data) {
-		return Game::moduleSend(::hash("system"), target, command, data);
-	}
-		
 }

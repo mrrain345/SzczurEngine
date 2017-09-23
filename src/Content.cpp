@@ -1,4 +1,3 @@
-#define SZCZUR_CORE
 #include <SzczurEngine/Content.h>
 #include <iostream>
 

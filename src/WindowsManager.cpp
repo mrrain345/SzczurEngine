@@ -1,4 +1,3 @@
-#define SZCZUR_CORE
 #include <SzczurEngine/WindowsManager.h>
 #include <Szczur/Types.h>
 

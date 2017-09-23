@@ -1,16 +1,12 @@
 #pragma once
-#ifdef SZCZUR_CORE
-	#include <SFML/System/Clock.hpp>
-	#include <list>
-#endif
+#include <SFML/System/Clock.hpp>
+#include <list>
 
 namespace Szczur {
 	class TimeEvents;
 	
 	class Time {
-#ifdef SZCZUR_CORE
 		friend class Game;
-#endif
 		friend class TimeEvents;
 	
 	public:
@@ -32,7 +28,6 @@ namespace Szczur {
 		static void registerHandler			(TimeEvents* handler);
 		static void unregisterHandler		(TimeEvents* handler);
 	
-#ifdef SZCZUR_CORE
 		static float _time;
 		static float _deltaTime;
 		static float _realTime;
@@ -53,7 +48,6 @@ namespace Szczur {
 		
 		static void init					();
 		static void updateTimeSystem		();
-#endif
 	};
 	
 	class TimeEvents {

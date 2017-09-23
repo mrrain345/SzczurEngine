@@ -1,4 +1,3 @@
-#define SZCZUR_CORE
 #include <Szczur/Types.h>
 #include <SzczurEngine/Map.h>
 #include <SzczurEngine/Events/Event.h>
