@@ -65,6 +65,6 @@ namespace Szczur
 
 ## Porady
 
-**Przy klasach, które nie mogą być dziedziczone, dodawaj *final*.**
-**Przy metodach, które są dziedziczone, dodawaj *override*.**
+**Przy klasach, które nie mogą być dziedziczone, dodawaj *final*.**  
+**Przy metodach, które są dziedziczone, dodawaj *override*.**  
 **Przy funkcjach i metodach, które nie zmieniają wartości pól, dodawaj *const*.**
